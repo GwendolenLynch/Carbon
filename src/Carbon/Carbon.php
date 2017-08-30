@@ -1406,7 +1406,7 @@ class Carbon extends DateTime
      */
     public function eq(self $dt)
     {
-        return $this == $dt;
+        return $this->format('U') === $dt->format('U');
     }
 
     /**
