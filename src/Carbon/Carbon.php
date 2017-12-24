@@ -648,7 +648,7 @@ class Carbon extends DateTime
      *
      * @throws \InvalidArgumentException
      *
-     * @return string|int|\DateTimeZone
+     * @return string|int|bool|\DateTimeZone
      */
     public function __get($name)
     {
@@ -973,7 +973,7 @@ class Carbon extends DateTime
     /**
      * Set the first day of week
      *
-     * @param int
+     * @param int $day
      */
     public static function setWeekStartsAt($day)
     {
@@ -993,7 +993,7 @@ class Carbon extends DateTime
     /**
      * Set the last day of week
      *
-     * @param int
+     * @param int $day
      */
     public static function setWeekEndsAt($day)
     {
@@ -1013,7 +1013,7 @@ class Carbon extends DateTime
     /**
      * Set weekend days
      *
-     * @param array
+     * @param array $days
      */
     public static function setWeekendDays($days)
     {
@@ -1050,7 +1050,7 @@ class Carbon extends DateTime
      * Get the Carbon instance (real or mock) to be returned when a "now"
      * instance is created.
      *
-     * @return static the current instance used for testing
+     * @return static|null the current instance used for testing
      */
     public static function getTestNow()
     {
@@ -1072,7 +1072,7 @@ class Carbon extends DateTime
      * Determine if there is a relative keyword in the time string, this is to
      * create dates relative to now for test instances. e.g.: next tuesday
      *
-     * @param string $time
+     * @param string|null $time
      *
      * @return bool true if there is a keyword, otherwise false
      */
@@ -3320,7 +3320,7 @@ class Carbon extends DateTime
     /**
      * Consider the timezone when modifying the instance.
      *
-     * @param string $modify
+     * @param string|null $modify
      *
      * @return static
      */
