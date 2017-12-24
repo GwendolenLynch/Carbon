@@ -1,14 +1,14 @@
 # Carbon
 
-[![Latest Stable Version](https://poser.pugx.org/nesbot/carbon/v/stable.png)](https://packagist.org/packages/nesbot/carbon)
-[![Total Downloads](https://poser.pugx.org/nesbot/carbon/downloads.png)](https://packagist.org/packages/nesbot/carbon)
+[![Latest Stable Version](https://poser.pugx.org/carbondate/carbon/v/stable.png)](https://packagist.org/packages/carbondate/carbon)
+[![Total Downloads](https://poser.pugx.org/carbondate/carbon/downloads.png)](https://packagist.org/packages/carbondate/carbon)
 [![Build Status](https://travis-ci.org/briannesbitt/Carbon.svg?branch=master)](https://travis-ci.org/briannesbitt/Carbon)
 [![StyleCI](https://styleci.io/repos/5724990/shield?style=flat)](https://styleci.io/repos/5724990)
 [![codecov.io](https://codecov.io/github/briannesbitt/Carbon/coverage.svg?branch=master)](https://codecov.io/github/briannesbitt/Carbon?branch=master)
-[![PHP-Eye](https://php-eye.com/badge/nesbot/carbon/tested.svg?style=flat)](https://php-eye.com/package/nesbot/carbon)
+[![PHP-Eye](https://php-eye.com/badge/carbondate/carbon/tested.svg?style=flat)](https://php-eye.com/package/carbondate/carbon)
 [![PHPStan](https://img.shields.io/badge/PHPStan-enabled-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 
-A simple PHP API extension for DateTime. [http://carbon.nesbot.com](http://carbon.nesbot.com)
+A simple PHP API extension for DateTime. [https://carbondate.github.io](https://carbondate.github.io)
 
 ```php
 use Carbon\Carbon;
@@ -54,13 +54,13 @@ $daysSinceEpoch = Carbon::createFromTimestamp(0)->diffInDays();
 ### With Composer
 
 ```
-$ composer require nesbot/carbon
+$ composer require carbondate/carbon
 ```
 
 ```json
 {
     "require": {
-        "nesbot/carbon": "~1.21"
+        "carbondate/carbon": "^1.0"
     }
 }
 ```
@@ -75,9 +75,10 @@ printf("Now: %s", Carbon::now());
 ```
 
 <a name="install-nocomposer"/>
+
 ### Without Composer
 
-Why are you not using [composer](http://getcomposer.org/)? Download [Carbon.php](https://github.com/briannesbitt/Carbon/blob/master/src/Carbon/Carbon.php) from the repo and save the file into your project path somewhere.
+Why are you not using [Composer](http://getcomposer.org/)? Download [Carbon.php](https://github.com/CarbonDate/Carbon/blob/master/src/Carbon/Carbon.php) from the repo and save the file into your project path somewhere.
 
 ```php
 <?php
@@ -90,4 +91,4 @@ printf("Now: %s", Carbon::now());
 
 ## Docs
 
-[http://carbon.nesbot.com/docs](http://carbon.nesbot.com/docs)
+[https://carbondate.github.io/docs](https://carbondate.github.io/docs)
