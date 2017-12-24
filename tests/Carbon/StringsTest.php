@@ -57,34 +57,25 @@ class StringsTest extends AbstractTestCase
         $this->assertSame('Dec 25, 1975', $d->toFormattedDateString());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testToLocalizedFormattedDateString()
     {
-        /*
-         * Working out a Travis issue on how to set a different locale
-         * other than EN to test this.
-         *
-         * $cache = setlocale(LC_TIME, 0);
-         * setlocale(LC_TIME, 'German');
-         * $d = Carbon::create(1975, 12, 25, 14, 15, 16);
-         * $this->assertSame('Donnerstag 25 Dezember 1975', $d->formatLocalized('%A %d %B %Y'));
-         * setlocale(LC_TIME, $cache);
-         */
+        setlocale(LC_TIME, 'German');
+        $d = Carbon::create(1975, 12, 25, 14, 15, 16);
+        $this->assertSame('Donnerstag 25 Dezember 1975', $d->formatLocalized('%A %d %B %Y'));
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testToLocalizedFormattedDateStringWhenUtf8IsNedded()
     {
-        /*
-         * Working out a Travis issue on how to set a different locale
-         * other than EN to test this.
-         *
-         * Carbon::setUtf8(true);
-         * $cache = setlocale(LC_TIME, 0);
-         * $d = Carbon::create(2016, 01, 06, 00, 00, 00);
-         * setlocale(LC_TIME, 'spanish');
-         * $this->assertSame(utf8_encode('miércoles 06 enero 2016'), $d->formatLocalized('%A %d %B %Y'));
-         * setlocale(LC_TIME, $cache);
-         * Carbon::setUtf8(false);
-         */
+        Carbon::setUtf8(true);
+        setlocale(LC_TIME, 'spanish');
+        $d = Carbon::create(2016, 01, 06, 00, 00, 00);
+        $this->assertSame('miÃ©rcoles 06 enero 2016', $d->formatLocalized('%A %d %B %Y'));
     }
 
     public function testToLocalizedFormattedTimezonedDateString()
