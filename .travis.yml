@@ -5,10 +5,6 @@ cache:
     - $HOME/.composer/cache/files/
 
 php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
   - 7.1
   - 7.2
   - nightly
@@ -17,7 +13,6 @@ env:
   global:
     - coverage=false
     - lint=false
-    - phpstan=false
     - setup=basic
 
 sudo: false
@@ -27,14 +22,9 @@ before_install:
 
 install:
   - if [[ $lint = 'false' ]] ; then travis_retry composer remove friendsofphp/php-cs-fixer --no-update --dev ; fi
-  - if [[ $phpstan = 'true' ]] ; then travis_retry composer require phpstan/phpstan --no-update --dev ; fi
   - if [[ $setup = 'basic' ]] ; then travis_retry composer install --prefer-dist --no-interaction --no-suggest ; fi
   - if [[ $setup = 'stable' ]] ; then travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-stable ; fi
-  - |
-    if [[ $setup = 'lowest' ]] ; then
-        composer require sebastian/comparator:">=1.2.4" --no-update --dev
-        travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-stable --prefer-lowest
-    fi
+  - if [[ $setup = 'lowest' ]] ; then travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-stable --prefer-lowest ; fi
 
 script:
   - vendor/bin/phpunit --verbose --coverage-clover=coverage.xml
@@ -45,46 +35,23 @@ after_success:
 
 matrix:
   include:
-    - php: 5.4
-      env: setup=lowest
-    - php: 5.4
-      env: setup=stable
-    - php: 5.5
-      env: setup=lowest
-    - php: 5.5
-      env: setup=stable
-    - php: 5.6
-      env: setup=lowest
-    - php: 5.6
-      env: setup=stable
-    - php: 7.0
-      env: setup=lowest
-    - php: 7.0
-      env:
-        - lint=true
-        - phpstan=true
-        - setup=stable
     - php: 7.1
       env:
         - lint=true
-        - phpstan=true
         - setup=lowest
     - php: 7.1
       env:
         - lint=true
         - coverage=true
-        - phpstan=true
         - setup=stable
     - php: 7.2
       env:
         - lint=true
-        - phpstan=true
         - setup=lowest
     - php: 7.2
       env:
         - coverage=true
         - lint=true
-        - phpstan=true
         - setup=stable
   allow_failures:
     - php:
