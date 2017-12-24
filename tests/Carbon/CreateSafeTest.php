@@ -157,6 +157,8 @@ class CreateSafeTest extends AbstractTestCase
     {
         // 29 days in February for a leap year
         Carbon::createSafe(2016, 2, 29, 17, 16, 15);
+        // Checking that no exception is thrown
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -183,6 +185,8 @@ class CreateSafeTest extends AbstractTestCase
     {
         // 28 days in February for a non-leap year
         Carbon::createSafe(2015, 2, 28, 17, 16, 15);
+        // Checking that no exception is thrown
+        $this->addToAssertionCount(1);
     }
 
     public function testCreateSafePasses()
