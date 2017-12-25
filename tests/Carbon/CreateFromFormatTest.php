@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -29,7 +31,7 @@ class CreateFromFormatTest extends AbstractTestCase
      */
     protected $noErrors;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -48,41 +50,41 @@ class CreateFromFormatTest extends AbstractTestCase
         );
     }
 
-    public function testCreateFromFormatReturnsCarbon()
+    public function testCreateFromFormatReturnsCarbon(): void
     {
         $d = Carbon::createFromFormat('Y-m-d H:i:s', '1975-05-21 22:32:11');
         $this->assertCarbon($d, 1975, 5, 21, 22, 32, 11);
         $this->assertInstanceOfCarbon($d);
     }
 
-    public function testCreateFromFormatWithTimezoneString()
+    public function testCreateFromFormatWithTimezoneString(): void
     {
         $d = Carbon::createFromFormat('Y-m-d H:i:s', '1975-05-21 22:32:11', 'Europe/London');
         $this->assertCarbon($d, 1975, 5, 21, 22, 32, 11);
         $this->assertSame('Europe/London', $d->tzName);
     }
 
-    public function testCreateFromFormatWithTimezone()
+    public function testCreateFromFormatWithTimezone(): void
     {
         $d = Carbon::createFromFormat('Y-m-d H:i:s', '1975-05-21 22:32:11', new DateTimeZone('Europe/London'));
         $this->assertCarbon($d, 1975, 5, 21, 22, 32, 11);
         $this->assertSame('Europe/London', $d->tzName);
     }
 
-    public function testCreateFromFormatWithMillis()
+    public function testCreateFromFormatWithMillis(): void
     {
         $d = Carbon::createFromFormat('Y-m-d H:i:s.u', '1975-05-21 22:32:11.254687');
         $this->assertSame(254687, $d->micro);
     }
 
-    public function testCreateLastErrorsCanBeAccessedByExtendingClass()
+    public function testCreateLastErrorsCanBeAccessedByExtendingClass(): void
     {
         MyCarbon::getLastErrors();
         // Checking that no exception is thrown
         $this->addToAssertionCount(1);
     }
 
-    public function testCreateFromFormatHandlesLastErrors()
+    public function testCreateFromFormatHandlesLastErrors(): void
     {
         $carbon = Carbon::createFromFormat('d/m/Y', '41/02/1900');
         $datetime = DateTime::createFromFormat('d/m/Y', '41/02/1900');
@@ -91,7 +93,7 @@ class CreateFromFormatTest extends AbstractTestCase
         $this->assertSame($carbon->getLastErrors(), $datetime->getLastErrors());
     }
 
-    public function testCreateFromFormatResetLastErrors()
+    public function testCreateFromFormatResetLastErrors(): void
     {
         $carbon = Carbon::createFromFormat('d/m/Y', '41/02/1900');
         $this->assertSame($this->lastErrors, $carbon->getLastErrors());

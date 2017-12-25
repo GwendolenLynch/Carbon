@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -16,11 +18,11 @@ use Tests\AbstractTestCase;
 
 class PtTest extends AbstractTestCase
 {
-    public function testDiffForHumansLocalizedInPortuguese()
+    public function testDiffForHumansLocalizedInPortuguese(): void
     {
         Carbon::setLocale('pt');
         $scope = $this;
-        $this->wrapWithNonDstDate(function () use ($scope) {
+        $this->wrapWithNonDstDate(function () use ($scope): void {
             $d = Carbon::now()->subSecond();
             $scope->assertSame('1 segundo atrás', $d->diffForHumans());
 
@@ -76,11 +78,11 @@ class PtTest extends AbstractTestCase
         });
     }
 
-    public function testDiffForHumansLocalizedInPortugueseBrazil()
+    public function testDiffForHumansLocalizedInPortugueseBrazil(): void
     {
         Carbon::setLocale('pt-BR');
         $scope = $this;
-        $this->wrapWithNonDstDate(function () use ($scope) {
+        $this->wrapWithNonDstDate(function () use ($scope): void {
             $d = Carbon::now()->subSecond();
             $scope->assertSame('há 1 segundo', $d->diffForHumans());
 
@@ -136,11 +138,11 @@ class PtTest extends AbstractTestCase
         });
     }
 
-    public function testDiffForHumansLocalizedInPortugueseBrazilBC()
+    public function testDiffForHumansLocalizedInPortugueseBrazilBC(): void
     {
         Carbon::setLocale('pt_BR');
         $scope = $this;
-        $this->wrapWithNonDstDate(function () use ($scope) {
+        $this->wrapWithNonDstDate(function () use ($scope): void {
             $d = Carbon::now()->subSecond();
             $scope->assertSame('há 1 segundo', $d->diffForHumans());
 

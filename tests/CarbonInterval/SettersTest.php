@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -16,21 +18,21 @@ use Tests\AbstractTestCase;
 
 class SettersTest extends AbstractTestCase
 {
-    public function testYearsSetter()
+    public function testYearsSetter(): void
     {
         $ci = CarbonInterval::create(4, 5, 6, 5, 8, 9, 10);
         $ci->years = 2;
         $this->assertSame(2, $ci->years);
     }
 
-    public function testMonthsSetter()
+    public function testMonthsSetter(): void
     {
         $ci = CarbonInterval::create(4, 5, 6, 5, 8, 9, 10);
         $ci->months = 11;
         $this->assertSame(11, $ci->months);
     }
 
-    public function testWeeksSetter()
+    public function testWeeksSetter(): void
     {
         $ci = CarbonInterval::create(4, 5, 6, 5, 8, 9, 10);
         $ci->weeks = 11;
@@ -38,7 +40,7 @@ class SettersTest extends AbstractTestCase
         $this->assertSame(7 * 11, $ci->dayz);
     }
 
-    public function testDayzSetter()
+    public function testDayzSetter(): void
     {
         $ci = CarbonInterval::create(4, 5, 6, 5, 8, 9, 10);
         $ci->dayz = 11;
@@ -47,28 +49,28 @@ class SettersTest extends AbstractTestCase
         $this->assertSame(4, $ci->dayzExcludeWeeks);
     }
 
-    public function testHoursSetter()
+    public function testHoursSetter(): void
     {
         $ci = CarbonInterval::create(4, 5, 6, 5, 8, 9, 10);
         $ci->hours = 12;
         $this->assertSame(12, $ci->hours);
     }
 
-    public function testMinutesSetter()
+    public function testMinutesSetter(): void
     {
         $ci = CarbonInterval::create(4, 5, 6, 5, 8, 9, 10);
         $ci->minutes = 11;
         $this->assertSame(11, $ci->minutes);
     }
 
-    public function testSecondsSetter()
+    public function testSecondsSetter(): void
     {
         $ci = CarbonInterval::create(4, 5, 6, 5, 8, 9, 10);
         $ci->seconds = 34;
         $this->assertSame(34, $ci->seconds);
     }
 
-    public function testFluentSetters()
+    public function testFluentSetters(): void
     {
         $ci = CarbonInterval::years(4)->months(2)->dayz(5)->hours(3)->minute()->seconds(59);
         $this->assertInstanceOfCarbonInterval($ci);
@@ -79,19 +81,19 @@ class SettersTest extends AbstractTestCase
         $this->assertCarbonInterval($ci, 4, 2, 14, 3, 1, 59);
     }
 
-    public function testFluentSettersDaysOverwritesWeeks()
+    public function testFluentSettersDaysOverwritesWeeks(): void
     {
         $ci = CarbonInterval::weeks(3)->days(5);
         $this->assertCarbonInterval($ci, 0, 0, 5, 0, 0, 0);
     }
 
-    public function testFluentSettersWeeksOverwritesDays()
+    public function testFluentSettersWeeksOverwritesDays(): void
     {
         $ci = CarbonInterval::days(5)->weeks(3);
         $this->assertCarbonInterval($ci, 0, 0, 3 * 7, 0, 0, 0);
     }
 
-    public function testFluentSettersWeeksAndDaysIsCumulative()
+    public function testFluentSettersWeeksAndDaysIsCumulative(): void
     {
         $ci = CarbonInterval::year(5)->weeksAndDays(2, 6);
         $this->assertCarbonInterval($ci, 5, 0, 20, 0, 0, 0);

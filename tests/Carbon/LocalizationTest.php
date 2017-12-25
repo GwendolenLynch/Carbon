@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -18,7 +20,7 @@ use Tests\AbstractTestCase;
 
 class LocalizationTest extends AbstractTestCase
 {
-    public function testGetTranslator()
+    public function testGetTranslator(): void
     {
         $t = Carbon::getTranslator();
         $this->assertNotNull($t);
@@ -96,7 +98,7 @@ class LocalizationTest extends AbstractTestCase
      *
      * @param string $locale
      */
-    public function testSetLocale($locale)
+    public function testSetLocale($locale): void
     {
         $this->assertTrue(Carbon::setLocale($locale));
         $this->assertSame($locale, Carbon::getLocale());
@@ -107,7 +109,7 @@ class LocalizationTest extends AbstractTestCase
      *
      * @param string $locale
      */
-    public function testSetTranslator($locale)
+    public function testSetTranslator($locale): void
     {
         $t = new Translator($locale);
         $t->addLoader('array', new ArrayLoader());
@@ -118,7 +120,7 @@ class LocalizationTest extends AbstractTestCase
         $this->assertSame($locale, $t->getLocale());
     }
 
-    public function testSetLocaleWithKnownLocale()
+    public function testSetLocaleWithKnownLocale(): void
     {
         $this->assertTrue(Carbon::setLocale('fr'));
     }
@@ -147,17 +149,17 @@ class LocalizationTest extends AbstractTestCase
      *
      * @param string $malformedLocale
      */
-    public function testSetLocaleWithMalformedLocale($malformedLocale)
+    public function testSetLocaleWithMalformedLocale($malformedLocale): void
     {
         $this->assertTrue(Carbon::setLocale($malformedLocale));
     }
 
-    public function testSetLocaleWithNonExistingLocale()
+    public function testSetLocaleWithNonExistingLocale(): void
     {
         $this->assertFalse(Carbon::setLocale('pt-XX'));
     }
 
-    public function testSetLocaleWithUnknownLocale()
+    public function testSetLocaleWithUnknownLocale(): void
     {
         $this->assertFalse(Carbon::setLocale('zz'));
     }

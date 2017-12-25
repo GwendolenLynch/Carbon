@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -18,31 +20,31 @@ use Tests\AbstractTestCase;
 
 class InstanceTest extends AbstractTestCase
 {
-    public function testInstanceFromDateTime()
+    public function testInstanceFromDateTime(): void
     {
         $dating = Carbon::instance(DateTime::createFromFormat('Y-m-d H:i:s', '1975-05-21 22:32:11'));
         $this->assertCarbon($dating, 1975, 5, 21, 22, 32, 11);
     }
 
-    public function testInstanceFromCarbon()
+    public function testInstanceFromCarbon(): void
     {
         $dating = Carbon::instance(Carbon::create(1975, 5, 21, 22, 32, 11));
         $this->assertCarbon($dating, 1975, 5, 21, 22, 32, 11);
     }
 
-    public function testInstanceFromDateTimeKeepsTimezoneName()
+    public function testInstanceFromDateTimeKeepsTimezoneName(): void
     {
         $dating = Carbon::instance(DateTime::createFromFormat('Y-m-d H:i:s', '1975-05-21 22:32:11')->setTimezone(new DateTimeZone('America/Vancouver')));
         $this->assertSame('America/Vancouver', $dating->tzName);
     }
 
-    public function testInstanceFromCarbonKeepsTimezoneName()
+    public function testInstanceFromCarbonKeepsTimezoneName(): void
     {
         $dating = Carbon::instance(Carbon::create(1975, 5, 21, 22, 32, 11)->setTimezone(new \DateTimeZone('America/Vancouver')));
         $this->assertSame('America/Vancouver', $dating->tzName);
     }
 
-    public function testInstanceFromDateTimeKeepsMicros()
+    public function testInstanceFromDateTimeKeepsMicros(): void
     {
         $micro = 254687;
         $datetime = DateTime::createFromFormat('Y-m-d H:i:s.u', '2014-02-01 03:45:27.'.$micro);
@@ -50,7 +52,7 @@ class InstanceTest extends AbstractTestCase
         $this->assertSame($micro, $carbon->micro);
     }
 
-    public function testInstanceFromCarbonKeepsMicros()
+    public function testInstanceFromCarbonKeepsMicros(): void
     {
         $micro = 254687;
         $carbon = Carbon::createFromFormat('Y-m-d H:i:s.u', '2014-02-01 03:45:27.'.$micro);

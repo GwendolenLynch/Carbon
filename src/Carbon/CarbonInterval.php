@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -106,18 +108,7 @@ class CarbonInterval extends DateInterval
     //////////////////////////// CONSTRUCTORS /////////////////////////
     ///////////////////////////////////////////////////////////////////
 
-    /**
-     * Create a new CarbonInterval instance.
-     *
-     * @param int $years
-     * @param int $months
-     * @param int $weeks
-     * @param int $days
-     * @param int $hours
-     * @param int $minutes
-     * @param int $seconds
-     */
-    public function __construct($years = 1, $months = null, $weeks = null, $days = null, $hours = null, $minutes = null, $seconds = null)
+    public function __construct(?int $years = 1, ?int $months = null, ?int $weeks = null, ?int $days = null, ?int $hours = null, ?int $minutes = null, ?int $seconds = null)
     {
         $spec = static::PERIOD_PREFIX;
 
@@ -150,18 +141,8 @@ class CarbonInterval extends DateInterval
      * This is an alias for the constructor that allows better fluent
      * syntax as it allows you to do CarbonInterval::create(1)->fn() rather than
      * (new CarbonInterval(1))->fn().
-     *
-     * @param int $years
-     * @param int $months
-     * @param int $weeks
-     * @param int $days
-     * @param int $hours
-     * @param int $minutes
-     * @param int $seconds
-     *
-     * @return static
      */
-    public static function create($years = 1, $months = null, $weeks = null, $days = null, $hours = null, $minutes = null, $seconds = null)
+    public static function create(?int $years = 1, ?int $months = null, ?int $weeks = null, ?int $days = null, ?int $hours = null, ?int $minutes = null, ?int $seconds = null): self
     {
         return new static($years, $months, $weeks, $days, $hours, $minutes, $seconds);
     }
@@ -171,13 +152,8 @@ class CarbonInterval extends DateInterval
      *
      * Note: This is done using the magic method to allow static and instance methods to
      *       have the same names.
-     *
-     * @param string $name
-     * @param array  $args
-     *
-     * @return static
      */
-    public static function __callStatic($name, $args)
+    public static function __callStatic(string $name, array $args): self
     {
         $arg = \count($args) === 0 ? 1 : $args[0];
 
@@ -218,13 +194,9 @@ class CarbonInterval extends DateInterval
      * DateInterval objects created from DateTime::diff() as you can't externally
      * set the $days field.
      *
-     * @param DateInterval $di
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return static
      */
-    public static function instance(DateInterval $di)
+    public static function instance(DateInterval $di): self
     {
         if (static::wasCreatedFromDiff($di)) {
             throw new InvalidArgumentException('Can not instance a DateInterval object created from DateTime::diff().');
@@ -243,10 +215,8 @@ class CarbonInterval extends DateInterval
 
     /**
      * Initialize the translator instance if necessary.
-     *
-     * @return \Symfony\Component\Translation\TranslatorInterface
      */
-    protected static function translator()
+    protected static function translator(): TranslatorInterface
     {
         if (static::$translator === null) {
             $translator = new Translator('en');
@@ -260,40 +230,32 @@ class CarbonInterval extends DateInterval
 
     /**
      * Get the translator instance in use
-     *
-     * @return \Symfony\Component\Translation\TranslatorInterface
      */
-    public static function getTranslator()
+    public static function getTranslator(): TranslatorInterface
     {
         return static::translator();
     }
 
     /**
      * Set the translator instance to use
-     *
-     * @param TranslatorInterface $translator
      */
-    public static function setTranslator(TranslatorInterface $translator)
+    public static function setTranslator(TranslatorInterface $translator): void
     {
         static::$translator = $translator;
     }
 
     /**
      * Get the current translator locale
-     *
-     * @return string
      */
-    public static function getLocale()
+    public static function getLocale(): string
     {
         return static::translator()->getLocale();
     }
 
     /**
      * Set the current translator locale
-     *
-     * @param string $locale
      */
-    public static function setLocale($locale)
+    public static function setLocale(string $locale): void
     {
         $translator = static::translator();
         $translator->setLocale($locale);
@@ -314,10 +276,8 @@ class CarbonInterval extends DateInterval
      * @param string $name
      *
      * @throws \InvalidArgumentException
-     *
-     * @return int
      */
-    public function __get($name)
+    public function __get($name): int
     {
         switch ($name) {
             case 'years':
@@ -352,13 +312,8 @@ class CarbonInterval extends DateInterval
 
     /**
      * Set a part of the CarbonInterval object
-     *
-     * @param string $name
-     * @param int    $val
-     *
-     * @throws \InvalidArgumentException
      */
-    public function __set($name, $val)
+    public function __set(string $name, int $val): void
     {
         switch ($name) {
             case 'years':
@@ -396,10 +351,8 @@ class CarbonInterval extends DateInterval
      *
      * @param int $weeks Number of weeks to set
      * @param int $days  Number of days to set
-     *
-     * @return static
      */
-    public function weeksAndDays($weeks, $days)
+    public function weeksAndDays(int $weeks, int $days): self
     {
         $this->dayz = ($weeks * Carbon::DAYS_PER_WEEK) + $days;
 
@@ -411,13 +364,8 @@ class CarbonInterval extends DateInterval
      *
      * Note: This is done using the magic method to allow static and instance methods to
      *       have the same names.
-     *
-     * @param string $name
-     * @param array  $args
-     *
-     * @return static
      */
-    public function __call($name, $args)
+    public function __call(string $name, array $args): self
     {
         $arg = \count($args) === 0 ? 1 : $args[0];
 
@@ -464,10 +412,8 @@ class CarbonInterval extends DateInterval
 
     /**
      * Get the current interval in a human readable format in the current locale.
-     *
-     * @return string
      */
-    public function forHumans()
+    public function forHumans(): string
     {
         $periods = array(
             'year' => $this->years,
@@ -501,12 +447,8 @@ class CarbonInterval extends DateInterval
 
     /**
      * Add the passed interval to the current instance
-     *
-     * @param DateInterval $interval
-     *
-     * @return static
      */
-    public function add(DateInterval $interval)
+    public function add(DateInterval $interval): self
     {
         $sign = $interval->invert === 1 ? -1 : 1;
 
@@ -526,10 +468,8 @@ class CarbonInterval extends DateInterval
 
     /**
      * Get the interval_spec string
-     *
-     * @return string
      */
-    public function spec()
+    public function spec(): string
     {
         $date = \array_filter(array(
             static::PERIOD_YEARS => $this->y,

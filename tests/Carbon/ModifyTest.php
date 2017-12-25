@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -16,7 +18,7 @@ use Tests\AbstractTestCase;
 
 class ModifyTest extends AbstractTestCase
 {
-    public function testSimpleModify()
+    public function testSimpleModify(): void
     {
         $a = new Carbon('2014-03-30 00:00:00');
         $b = $a->copy();
@@ -24,7 +26,7 @@ class ModifyTest extends AbstractTestCase
         $this->assertSame(24, $a->diffInHours($b));
     }
 
-    public function testTimezoneModify()
+    public function testTimezoneModify(): void
     {
         $a = new Carbon('2014-03-30 00:00:00', 'Europe/London');
         $b = $a->copy();

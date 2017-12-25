@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -17,13 +19,13 @@ use Tests\AbstractTestCase;
 
 class CreateFromTimestampTest extends AbstractTestCase
 {
-    public function testCreateReturnsDatingInstance()
+    public function testCreateReturnsDatingInstance(): void
     {
         $d = Carbon::createFromTimestamp(Carbon::create(1975, 5, 21, 22, 32, 5)->timestamp);
         $this->assertCarbon($d, 1975, 5, 21, 22, 32, 5);
     }
 
-    public function testCreateFromTimestampUsesDefaultTimezone()
+    public function testCreateFromTimestampUsesDefaultTimezone(): void
     {
         $d = Carbon::createFromTimestamp(0);
 
@@ -32,14 +34,14 @@ class CreateFromTimestampTest extends AbstractTestCase
         $this->assertSame(-5 * 3600, $d->offset);
     }
 
-    public function testCreateFromTimestampWithDateTimeZone()
+    public function testCreateFromTimestampWithDateTimeZone(): void
     {
         $d = Carbon::createFromTimestamp(0, new DateTimeZone('UTC'));
         $this->assertSame('UTC', $d->tzName);
         $this->assertCarbon($d, 1970, 1, 1, 0, 0, 0);
     }
 
-    public function testCreateFromTimestampWithString()
+    public function testCreateFromTimestampWithString(): void
     {
         $d = Carbon::createFromTimestamp(0, 'UTC');
         $this->assertCarbon($d, 1970, 1, 1, 0, 0, 0);
@@ -47,7 +49,7 @@ class CreateFromTimestampTest extends AbstractTestCase
         $this->assertSame('UTC', $d->tzName);
     }
 
-    public function testCreateFromTimestampGMTDoesNotUseDefaultTimezone()
+    public function testCreateFromTimestampGMTDoesNotUseDefaultTimezone(): void
     {
         $d = Carbon::createFromTimestampUTC(0);
         $this->assertCarbon($d, 1970, 1, 1, 0, 0, 0);

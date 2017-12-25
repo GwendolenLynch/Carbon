@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -16,12 +18,12 @@ use Tests\AbstractTestCase;
 
 class ItTest extends AbstractTestCase
 {
-    public function testDiffForHumansLocalizedInItalian()
+    public function testDiffForHumansLocalizedInItalian(): void
     {
         Carbon::setLocale('it');
 
         $scope = $this;
-        $this->wrapWithNonDstDate(function () use ($scope) {
+        $this->wrapWithNonDstDate(function () use ($scope): void {
             $d = Carbon::now()->addYear();
             $scope->assertSame('1 anno da adesso', $d->diffForHumans());
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -16,12 +18,12 @@ use Tests\AbstractTestCase;
 
 class KmTest extends AbstractTestCase
 {
-    public function testDiffForHumansLocalizedInKhmer()
+    public function testDiffForHumansLocalizedInKhmer(): void
     {
         Carbon::setLocale('km');
 
         $scope = $this;
-        $this->wrapWithNonDstDate(function () use ($scope) {
+        $this->wrapWithNonDstDate(function () use ($scope): void {
             $d = Carbon::now()->subSecond();
             $scope->assertSame('1 វិនាទីមុន', $d->diffForHumans(null, false));
 
@@ -65,12 +67,12 @@ class KmTest extends AbstractTestCase
             $scope->assertSame('2 ឆ្នាំមុន', $d->diffForHumans(null, false));
 
             $d = Carbon::now()->addSecond();
-            $scope->assertSame('1 វិនាទីពី​ឥឡូវ', $d->diffForHumans(null, false));
+            $scope->assertSame("1 វិនាទីពី\u{200b}ឥឡូវ", $d->diffForHumans(null, false));
 
             $d = Carbon::now()->addSecond();
             $d2 = Carbon::now();
-            $scope->assertSame('នៅ​ក្រោយ 1 វិនាទី', $d->diffForHumans($d2, false, true));
-            $scope->assertSame('នៅ​មុន 1 វិនាទី', $d2->diffForHumans($d, false, true));
+            $scope->assertSame("នៅ\u{200b}ក្រោយ 1 វិនាទី", $d->diffForHumans($d2, false, true));
+            $scope->assertSame("នៅ\u{200b}មុន 1 វិនាទី", $d2->diffForHumans($d, false, true));
 
             $scope->assertSame('1 វិនាទី', $d->diffForHumans($d2, true, true));
             $scope->assertSame('2 វិនាទី', $d2->diffForHumans($d->addSecond(), true, true));
