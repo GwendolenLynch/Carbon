@@ -38,7 +38,7 @@ install:
 
 script:
   - vendor/bin/phpunit --verbose --coverage-clover=coverage.xml
-  - if [[ $phpstan = 'true' ]] ; then vendor/bin/phpstan analyse --configuration phpstan.neon --level 6 src tests ; fi
+  - if [[ $phpstan = 'true' ]] ; then vendor/bin/phpstan analyse --configuration phpstan.neon --level 7 src tests ; fi
 
 after_success:
   - if [[ $coverage = 'true' ]] ; then bash <(curl -s https://codecov.io/bash) ; fi
