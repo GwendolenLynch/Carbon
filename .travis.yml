@@ -23,10 +23,10 @@ env:
 sudo: false
 
 before_install:
-  - if [[ $coverage != 'true' ]] ; then phpenv config-rm xdebug.ini || true ; fi
+  - if [[ $coverage = 'false' ]] ; then phpenv config-rm xdebug.ini || true ; fi
 
 install:
-  - if [[ $lint != 'true' ]] ; then travis_retry composer remove friendsofphp/php-cs-fixer --no-update --dev ; fi
+  - if [[ $lint = 'false' ]] ; then travis_retry composer remove friendsofphp/php-cs-fixer --no-update --dev ; fi
   - if [[ $phpstan = 'true' ]] ; then travis_retry composer require phpstan/phpstan --no-update --dev ; fi
   - if [[ $setup = 'basic' ]] ; then travis_retry composer install --prefer-dist --no-interaction --no-suggest ; fi
   - if [[ $setup = 'stable' ]] ; then travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-stable ; fi
