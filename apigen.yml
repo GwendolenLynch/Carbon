@@ -1,0 +1,10 @@
+parameters:
+    visibilityLevels:
+        - public
+        - protected
+    annotationGroups:
+        - todo
+        - deprecated
+    title: 'Carbon API'
+    baseUrl: 'https://carbondate.github.io/api'
+    overwrite: true

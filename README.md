@@ -10,6 +10,8 @@
 
 A simple PHP API extension for DateTime. [https://carbondate.github.io](https://carbondate.github.io)
 
+**NOTE:** This is an (currently) unofficial continuation of [Brian Nesbitt's](http://nesbot.com) work.
+
 ```php
 use Carbon\Carbon;
 
