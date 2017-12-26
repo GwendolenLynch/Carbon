@@ -152,7 +152,7 @@ class Carbon extends DateTime
     /**
      * A test Carbon instance to be returned when now instances are created.
      *
-     * @var \Carbon\Carbon
+     * @var \Carbon\Carbon|null
      */
     protected static $testNow;
 
@@ -270,16 +270,17 @@ class Carbon extends DateTime
      */
     public function __construct($time = null, $tz = null)
     {
+        $time = $time ?: 'now';
         // If the class has a test now set and we are trying to create a now()
         // instance then override as required
-        if (static::hasTestNow() && (empty($time) || $time === 'now' || static::hasRelativeKeywords($time))) {
-            $testInstance = clone static::getTestNow();
+        if (static::$testNow instanceof self && ($time === 'now' || static::hasRelativeKeywords($time))) {
+            $testInstance = clone static::$testNow;
             if (static::hasRelativeKeywords($time)) {
                 $testInstance->modify($time);
             }
 
             //shift the time according to the given time zone
-            if ($tz !== null && $tz !== static::getTestNow()->getTimezone()) {
+            if ($tz !== null && $tz !== static::$testNow->getTimezone()) {
                 $testInstance->setTimezone($tz);
             } else {
                 $tz = $testInstance->getTimezone();
@@ -428,7 +429,7 @@ class Carbon extends DateTime
      */
     public static function create($year = null, $month = null, $day = null, $hour = null, $minute = null, $second = null, $tz = null)
     {
-        $now = static::hasTestNow() ? static::getTestNow()->getTimestamp() : time();
+        $now = static::$testNow ? static::$testNow->getTimestamp() : time();
 
         $defaults = array_combine(array(
             'year',

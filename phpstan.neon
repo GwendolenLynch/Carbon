@@ -1,10 +1,9 @@
 parameters:
 	ignoreErrors:
-		- "#Casting to int something that's already int#"
 		- '#Static call to instance method Carbon\\CarbonInterval#'
 		- '#Parameter \#1 \$value of method Carbon\\Carbon::setTimezone\(\) expects DateTimeZone|string, DateTimeZone|int|string given#'
-		- '#Parameter \#1 \$modify of method Carbon\\Carbon::modify\(\) expects string|null, Carbon\Carbon given#'
 		- '#Method Carbon\\CarbonInterval::.*\(\) invoked with 1 parameter#'
+		- '#Method Carbon\\Carbon::getTestNow\(\) should return static\(Carbon\\Carbon\)|null but returns Carbon\\Carbon|null#'
 
 		# Valid tests
 		- '#Access to an undefined property Carbon\\CarbonInterval::\$sdfsdfss#'
