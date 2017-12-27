@@ -25,7 +25,7 @@ class SerializationTest extends AbstractTestCase
     {
         parent::setUp();
 
-        if (version_compare(PHP_VERSION, '5.4.0', '<')) {
+        if (\version_compare(PHP_VERSION, '5.4.0', '<')) {
             $this->serialized = 'O:13:"Carbon\Carbon":3:{s:4:"date";s:19:"2016-02-01 13:20:25";s:13:"timezone_type";i:3;s:8:"timezone";s:15:"America/Toronto";}';
         } else {
             $this->serialized = 'O:13:"Carbon\Carbon":3:{s:4:"date";s:26:"2016-02-01 13:20:25.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:15:"America/Toronto";}';
@@ -36,7 +36,7 @@ class SerializationTest extends AbstractTestCase
     {
         $dt = Carbon::create(2016, 2, 1, 13, 20, 25);
         $this->assertSame($this->serialized, $dt->serialize());
-        $this->assertSame($this->serialized, serialize($dt));
+        $this->assertSame($this->serialized, \serialize($dt));
     }
 
     public function testFromUnserialized()
@@ -44,13 +44,13 @@ class SerializationTest extends AbstractTestCase
         $dt = Carbon::fromSerialized($this->serialized);
         $this->assertCarbon($dt, 2016, 2, 1, 13, 20, 25);
 
-        $dt = unserialize($this->serialized);
+        $dt = \unserialize($this->serialized);
         $this->assertCarbon($dt, 2016, 2, 1, 13, 20, 25);
     }
 
     public function testSerialization()
     {
-        $this->assertEquals(Carbon::now(), unserialize(serialize(Carbon::now())));
+        $this->assertEquals(Carbon::now(), \unserialize(\serialize(Carbon::now())));
     }
 
     public function providerTestFromUnserializedWithInvalidValue()
