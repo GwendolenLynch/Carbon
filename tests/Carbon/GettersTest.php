@@ -18,11 +18,10 @@ use Tests\AbstractTestCase;
 
 class GettersTest extends AbstractTestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testGettersThrowExceptionOnUnknownGetter(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         Carbon::create(1234, 5, 6, 7, 8, 9)->doesNotExit;
     }
 

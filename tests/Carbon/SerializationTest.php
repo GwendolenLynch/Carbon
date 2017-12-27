@@ -69,12 +69,13 @@ class SerializationTest extends AbstractTestCase
     /**
      * @param mixed $value
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid serialized value.
      * @dataProvider \Tests\Carbon\SerializationTest::providerTestFromUnserializedWithInvalidValue
      */
     public function testFromUnserializedWithInvalidValue($value): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid serialized value.');
+
         Carbon::fromSerialized((string) $value);
     }
 }

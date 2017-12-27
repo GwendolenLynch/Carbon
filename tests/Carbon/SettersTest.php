@@ -168,51 +168,46 @@ class SettersTest extends AbstractTestCase
         $this->assertSame(11, $d->timestamp);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetTimezoneWithInvalidTimezone(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $d = Carbon::now();
         $d->setTimezone('sdf');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown or bad timezone (sdf)
-     */
     public function testTimezoneWithInvalidTimezone(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown or bad timezone (sdf)');
+
         $d = Carbon::now();
         $d->timezone = 'sdf';
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown or bad timezone (sdf)
-     */
     public function testTimezoneWithInvalidTimezoneSetter(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown or bad timezone (sdf)');
+
         $d = Carbon::now();
         $d->timezone('sdf');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown or bad timezone (sdf)
-     */
     public function testTzWithInvalidTimezone(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown or bad timezone (sdf)');
+
         $d = Carbon::now();
         $d->tz = 'sdf';
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown or bad timezone (sdf)
-     */
     public function testTzWithInvalidTimezoneSetter(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown or bad timezone (sdf)');
+
         $d = Carbon::now();
         $d->tz('sdf');
     }
@@ -271,11 +266,10 @@ class SettersTest extends AbstractTestCase
         $this->assertSame('America/Vancouver', $d->tzName);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvalidSetter(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $d = Carbon::now();
         $d->doesNotExit = 'bb';
     }
