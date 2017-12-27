@@ -27,7 +27,7 @@ return array(
     'second' => ':count វិនាទី',
     's' => ':count វិនាទី',
     'ago' => ':timeមុន',
-    'from_now' => ':timeពី​ឥឡូវ',
-    'after' => 'នៅ​ក្រោយ :time',
-    'before' => 'នៅ​មុន :time',
+    'from_now' => ":timeពី\u{200b}ឥឡូវ",
+    'after' => "នៅ\u{200b}ក្រោយ :time",
+    'before' => "នៅ\u{200b}មុន :time",
 );
