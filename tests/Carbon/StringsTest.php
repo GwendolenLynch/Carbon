@@ -62,10 +62,10 @@ class StringsTest extends AbstractTestCase
      */
     public function testToLocalizedFormattedDateString()
     {
-        if (getenv('TRAVIS')) {
+        if (\getenv('TRAVIS')) {
             $this->markTestSkipped();
         }
-        setlocale(LC_TIME, 'German');
+        \setlocale(LC_TIME, 'German');
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('Donnerstag 25 Dezember 1975', $d->formatLocalized('%A %d %B %Y'));
     }
@@ -75,11 +75,11 @@ class StringsTest extends AbstractTestCase
      */
     public function testToLocalizedFormattedDateStringWhenUtf8IsNedded()
     {
-        if (getenv('TRAVIS')) {
+        if (\getenv('TRAVIS')) {
             $this->markTestSkipped();
         }
         Carbon::setUtf8(true);
-        setlocale(LC_TIME, 'spanish');
+        \setlocale(LC_TIME, 'spanish');
         $d = Carbon::create(2016, 01, 06, 00, 00, 00);
         $this->assertSame('miércoles 06 enero 2016', $d->formatLocalized('%A %d %B %Y'));
     }
