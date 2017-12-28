@@ -31,16 +31,16 @@ abstract class AbstractTestCase extends TestCase
     protected function setUp()
     {
         //save current timezone
-        $this->saveTz = date_default_timezone_get();
+        $this->saveTz = \date_default_timezone_get();
 
-        date_default_timezone_set('America/Toronto');
+        \date_default_timezone_set('America/Toronto');
 
         Carbon::setTestNow($this->now = Carbon::now());
     }
 
     protected function tearDown()
     {
-        date_default_timezone_set($this->saveTz);
+        \date_default_timezone_set($this->saveTz);
         Carbon::setTestNow();
         Carbon::resetMonthsOverflow();
     }

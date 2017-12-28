@@ -249,7 +249,7 @@ class ComparisonTest extends AbstractTestCase
     public function testEqualDatesCreatedViaInstance()
     {
         $dt1 = Carbon::instance(new \DateTime());
-        usleep(5);
+        \usleep(5);
         $dt2 = Carbon::instance(new \DateTime());
         $this->assertTrue($dt1->eq($dt2));
     }
@@ -257,7 +257,7 @@ class ComparisonTest extends AbstractTestCase
     public function testEqualDatesCreatedViaNow()
     {
         $dt1 = Carbon::now();
-        usleep(5);
+        \usleep(5);
         $dt2 = Carbon::now();
         $this->assertTrue($dt1->eq($dt2));
     }

@@ -179,7 +179,7 @@ class CarbonInterval extends DateInterval
      */
     public static function __callStatic($name, $args)
     {
-        $arg = count($args) === 0 ? 1 : $args[0];
+        $arg = \count($args) === 0 ? 1 : $args[0];
 
         switch ($name) {
             case 'years':
@@ -339,14 +339,14 @@ class CarbonInterval extends DateInterval
                 return $this->s;
 
             case 'weeks':
-                return (int) floor($this->d / Carbon::DAYS_PER_WEEK);
+                return (int) \floor($this->d / Carbon::DAYS_PER_WEEK);
 
             case 'daysExcludeWeeks':
             case 'dayzExcludeWeeks':
                 return $this->d % Carbon::DAYS_PER_WEEK;
 
             default:
-                throw new InvalidArgumentException(sprintf("Unknown getter '%s'", $name));
+                throw new InvalidArgumentException(\sprintf("Unknown getter '%s'", $name));
         }
     }
 
@@ -419,7 +419,7 @@ class CarbonInterval extends DateInterval
      */
     public function __call($name, $args)
     {
-        $arg = count($args) === 0 ? 1 : $args[0];
+        $arg = \count($args) === 0 ? 1 : $args[0];
 
         switch ($name) {
             case 'years':
@@ -486,7 +486,7 @@ class CarbonInterval extends DateInterval
             }
         }
 
-        return implode(' ', $parts);
+        return \implode(' ', $parts);
     }
 
     /**
@@ -531,13 +531,13 @@ class CarbonInterval extends DateInterval
      */
     public function spec()
     {
-        $date = array_filter(array(
+        $date = \array_filter(array(
             static::PERIOD_YEARS => $this->y,
             static::PERIOD_MONTHS => $this->m,
             static::PERIOD_DAYS => $this->d,
         ));
 
-        $time = array_filter(array(
+        $time = \array_filter(array(
             static::PERIOD_HOURS => $this->h,
             static::PERIOD_MINUTES => $this->i,
             static::PERIOD_SECONDS => $this->s,
@@ -549,7 +549,7 @@ class CarbonInterval extends DateInterval
             $specString .= $value.$key;
         }
 
-        if (count($time) > 0) {
+        if (\count($time) > 0) {
             $specString .= static::PERIOD_TIME_PREFIX;
             foreach ($time as $key => $value) {
                 $specString .= $value.$key;

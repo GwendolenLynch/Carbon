@@ -113,7 +113,7 @@ class GettersTest extends AbstractTestCase
     public function testGetAgeWithRealAge()
     {
         $d = Carbon::createFromDate(1975, 5, 21);
-        $age = intval(substr(date('Ymd') - date('Ymd', $d->timestamp), 0, -4));
+        $age = \intval(\substr(\date('Ymd') - \date('Ymd', $d->timestamp), 0, -4));
 
         $this->assertSame($age, $d->age);
     }

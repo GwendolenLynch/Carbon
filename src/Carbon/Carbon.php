@@ -229,15 +229,15 @@ class Carbon extends DateTime
     {
         if ($object === null) {
             // Don't return null... avoid Bug #52063 in PHP <5.3.6
-            return new DateTimeZone(date_default_timezone_get());
+            return new DateTimeZone(\date_default_timezone_get());
         }
 
         if ($object instanceof DateTimeZone) {
             return $object;
         }
 
-        if (is_numeric($object)) {
-            $tzName = timezone_name_from_abbr(null, $object * 3600, true);
+        if (\is_numeric($object)) {
+            $tzName = \timezone_name_from_abbr(null, $object * 3600, true);
 
             if ($tzName === false) {
                 throw new InvalidArgumentException('Unknown or bad timezone ('.$object.')');
@@ -246,7 +246,7 @@ class Carbon extends DateTime
             $object = $tzName;
         }
 
-        $tz = @timezone_open((string) $object);
+        $tz = @\timezone_open((string) $object);
 
         if ($tz === false) {
             throw new InvalidArgumentException('Unknown or bad timezone ('.$object.')');
@@ -429,16 +429,16 @@ class Carbon extends DateTime
      */
     public static function create($year = null, $month = null, $day = null, $hour = null, $minute = null, $second = null, $tz = null)
     {
-        $now = static::$testNow ? static::$testNow->getTimestamp() : time();
+        $now = static::$testNow ? static::$testNow->getTimestamp() : \time();
 
-        $defaults = array_combine(array(
+        $defaults = \array_combine(array(
             'year',
             'month',
             'day',
             'hour',
             'minute',
             'second',
-        ), explode('-', date('Y-n-j-G-i-s', $now)));
+        ), \explode('-', \date('Y-n-j-G-i-s', $now)));
 
         $year = $year === null ? $defaults['year'] : $year;
         $month = $month === null ? $defaults['month'] : $month;
@@ -463,7 +463,7 @@ class Carbon extends DateTime
             $year = 9999;
         }
 
-        $instance = static::createFromFormat('Y-n-j G:i:s', sprintf('%s-%s-%s %s:%02s:%02s', $year, $month, $day, $hour, $minute, $second), $tz);
+        $instance = static::createFromFormat('Y-n-j G:i:s', \sprintf('%s-%s-%s %s:%02s:%02s', $year, $month, $day, $hour, $minute, $second), $tz);
 
         if ($fixYear !== null) {
             $instance->addYears($fixYear);
@@ -511,7 +511,7 @@ class Carbon extends DateTime
         );
 
         foreach ($fields as $field => $range) {
-            if ($$field !== null && (!is_int($$field) || $$field < $range[0] || $$field > $range[1])) {
+            if ($$field !== null && (!\is_int($$field) || $$field < $range[0] || $$field > $range[1])) {
                 throw new InvalidDateException($field, $$field);
             }
         }
@@ -580,7 +580,7 @@ class Carbon extends DateTime
             return static::instance($dt);
         }
 
-        throw new InvalidArgumentException(implode(PHP_EOL, $lastErrors['errors']));
+        throw new InvalidArgumentException(\implode(PHP_EOL, $lastErrors['errors']));
     }
 
     /**
@@ -654,7 +654,7 @@ class Carbon extends DateTime
     public function __get($name)
     {
         switch (true) {
-            case array_key_exists($name, $formats = array(
+            case \array_key_exists($name, $formats = array(
                 'year' => 'Y',
                 'yearIso' => 'o',
                 'month' => 'n',
@@ -672,13 +672,13 @@ class Carbon extends DateTime
                 return (int) $this->format($formats[$name]);
 
             case $name === 'weekOfMonth':
-                return (int) ceil($this->day / static::DAYS_PER_WEEK);
+                return (int) \ceil($this->day / static::DAYS_PER_WEEK);
 
             case $name === 'age':
                 return $this->diffInYears();
 
             case $name === 'quarter':
-                return (int) ceil($this->month / static::MONTHS_PER_QUARTER);
+                return (int) \ceil($this->month / static::MONTHS_PER_QUARTER);
 
             case $name === 'offset':
                 return $this->getOffset();
@@ -690,7 +690,7 @@ class Carbon extends DateTime
                 return $this->format('I') === '1';
 
             case $name === 'local':
-                return $this->getOffset() === $this->copy()->setTimezone(date_default_timezone_get())->getOffset();
+                return $this->getOffset() === $this->copy()->setTimezone(\date_default_timezone_get())->getOffset();
 
             case $name === 'utc':
                 return $this->getOffset() === 0;
@@ -702,7 +702,7 @@ class Carbon extends DateTime
                 return $this->getTimezone()->getName();
 
             default:
-                throw new InvalidArgumentException(sprintf("Unknown getter '%s'", $name));
+                throw new InvalidArgumentException(\sprintf("Unknown getter '%s'", $name));
         }
     }
 
@@ -741,7 +741,7 @@ class Carbon extends DateTime
             case 'hour':
             case 'minute':
             case 'second':
-                list($year, $month, $day, $hour, $minute, $second) = explode('-', $this->format('Y-n-j-G-i-s'));
+                list($year, $month, $day, $hour, $minute, $second) = \explode('-', $this->format('Y-n-j-G-i-s'));
                 $$name = $value;
                 $this->setDateTime($year, $month, $day, $hour, $minute, $second);
                 break;
@@ -756,7 +756,7 @@ class Carbon extends DateTime
                 break;
 
             default:
-                throw new InvalidArgumentException(sprintf("Unknown setter '%s'", $name));
+                throw new InvalidArgumentException(\sprintf("Unknown setter '%s'", $name));
         }
     }
 
@@ -890,7 +890,7 @@ class Carbon extends DateTime
      */
     public function setTimeFromTimeString($time)
     {
-        $time = explode(':', $time);
+        $time = \explode(':', $time);
 
         $hour = $time[0];
         $minute = isset($time[1]) ? $time[1] : 0;
@@ -1044,7 +1044,7 @@ class Carbon extends DateTime
      */
     public static function setTestNow($testNow = null)
     {
-        static::$testNow = is_string($testNow) ? static::parse($testNow) : $testNow;
+        static::$testNow = \is_string($testNow) ? static::parse($testNow) : $testNow;
     }
 
     /**
@@ -1080,9 +1080,9 @@ class Carbon extends DateTime
     public static function hasRelativeKeywords($time)
     {
         // skip common format with a '-' in it
-        if (preg_match('/\d{4}-\d{1,2}-\d{1,2}/', $time) !== 1) {
+        if (\preg_match('/\d{4}-\d{1,2}-\d{1,2}/', $time) !== 1) {
             foreach (static::$relativeKeywords as $keyword) {
-                if (stripos($time, $keyword) !== false) {
+                if (\stripos($time, $keyword) !== false) {
                     return true;
                 }
             }
@@ -1151,11 +1151,11 @@ class Carbon extends DateTime
      */
     public static function setLocale($locale)
     {
-        $locale = preg_replace_callback('/\b([a-z]{2})[-_](?:([a-z]{4})[-_])?([a-z]{2})\b/', function ($matches) {
-            return $matches[1].'_'.(!empty($matches[2]) ? ucfirst($matches[2]).'_' : '').strtoupper($matches[3]);
-        }, strtolower($locale));
+        $locale = \preg_replace_callback('/\b([a-z]{2})[-_](?:([a-z]{4})[-_])?([a-z]{2})\b/', function ($matches) {
+            return $matches[1].'_'.(!empty($matches[2]) ? \ucfirst($matches[2]).'_' : '').\strtoupper($matches[3]);
+        }, \strtolower($locale));
 
-        if (file_exists($filename = __DIR__.'/Lang/'.$locale.'.php')) {
+        if (\file_exists($filename = __DIR__.'/Lang/'.$locale.'.php')) {
             $translator = static::translator();
             $translator->setLocale($locale);
 
@@ -1196,13 +1196,13 @@ class Carbon extends DateTime
     {
         // Check for Windows to find and replace the %e
         // modifier correctly
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $format = preg_replace('#(?<!%)((?:%%)*)%e#', '\1%#d', $format);
+        if (\strtoupper(\substr(PHP_OS, 0, 3)) === 'WIN') {
+            $format = \preg_replace('#(?<!%)((?:%%)*)%e#', '\1%#d', $format);
         }
 
-        $formatted = strftime($format, strtotime($this));
+        $formatted = \strftime($format, \strtotime($this));
 
-        return static::$utf8 ? utf8_encode($formatted) : $formatted;
+        return static::$utf8 ? \utf8_encode($formatted) : $formatted;
     }
 
     /**
@@ -1676,7 +1676,7 @@ class Carbon extends DateTime
      */
     public function isWeekend()
     {
-        return in_array($this->dayOfWeek, static::$weekendDays);
+        return \in_array($this->dayOfWeek, static::$weekendDays);
     }
 
     /**
@@ -2676,11 +2676,11 @@ class Carbon extends DateTime
         }
 
         $period = new DatePeriod($start, $ci, $end);
-        $vals = array_filter(iterator_to_array($period), function (DateTime $date) use ($callback) {
-            return call_user_func($callback, Carbon::instance($date));
+        $vals = \array_filter(\iterator_to_array($period), function (DateTime $date) use ($callback) {
+            return \call_user_func($callback, Carbon::instance($date));
         });
 
-        $diff = count($vals);
+        $diff = \count($vals);
 
         return $inverse && !$abs ? -$diff : $diff;
     }
@@ -2754,7 +2754,7 @@ class Carbon extends DateTime
         $dt = $dt ?: static::now($this->getTimezone());
         $value = $dt->getTimestamp() - $this->getTimestamp();
 
-        return $abs ? abs($value) : $value;
+        return $abs ? \abs($value) : $value;
     }
 
     /**
@@ -3346,7 +3346,7 @@ class Carbon extends DateTime
      */
     public function serialize()
     {
-        return serialize($this);
+        return \serialize($this);
     }
 
     /**
@@ -3360,7 +3360,7 @@ class Carbon extends DateTime
      */
     public static function fromSerialized($value)
     {
-        $instance = @unserialize($value);
+        $instance = @\unserialize($value);
 
         if (!$instance instanceof static) {
             throw new InvalidArgumentException('Invalid serialized value.');

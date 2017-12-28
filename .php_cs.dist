@@ -18,8 +18,20 @@ $rules = [
         'spacing' => 'none',
     ],
     'ereg_to_preg' => true,
+    'header_comment' => [
+        'header' => <<<'EOD'
+This file is part of the Carbon package.
+
+(c) Brian Nesbitt <brian@nesbot.com>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+EOD
+    ],
     'method_separation' => true,
+    'native_function_invocation' => true,
     'no_blank_lines_after_phpdoc' => true,
+    'no_empty_phpdoc' => true,
     'no_extra_consecutive_blank_lines' => true,
     'no_short_bool_cast' => true,
     'no_unneeded_control_parentheses' => true,
@@ -51,7 +63,8 @@ $rules = [
     'unary_operator_spaces' => true,
 ];
 
-return Config::create()->setRules($rules)
-             ->setFinder(Finder::create()->in(__DIR__))
-             ->setUsingCache(true)
-             ->setRiskyAllowed(true);
+return Config::create()
+    ->setRules($rules)
+    ->setFinder(Finder::create()->in(__DIR__))
+    ->setUsingCache(true)
+    ->setRiskyAllowed(true);
