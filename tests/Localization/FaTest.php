@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -16,12 +18,12 @@ use Tests\AbstractTestCase;
 
 class FaTest extends AbstractTestCase
 {
-    public function testDiffForHumansLocalizedInFarsi()
+    public function testDiffForHumansLocalizedInFarsi(): void
     {
         Carbon::setLocale('fa');
 
         $scope = $this;
-        $this->wrapWithNonDstDate(function () use ($scope) {
+        $this->wrapWithNonDstDate(function () use ($scope): void {
             $d = Carbon::now()->subSecond();
             $scope->assertSame('1 ثانیه پیش', $d->diffForHumans());
 

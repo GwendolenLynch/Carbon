@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -191,7 +193,7 @@ class Carbon extends DateTime
      *
      * @return void
      */
-    public static function useMonthsOverflow($monthsOverflow = true)
+    public static function useMonthsOverflow($monthsOverflow = true): void
     {
         static::$monthsOverflow = $monthsOverflow;
     }
@@ -201,17 +203,15 @@ class Carbon extends DateTime
      *
      * @return void
      */
-    public static function resetMonthsOverflow()
+    public static function resetMonthsOverflow(): void
     {
         static::$monthsOverflow = true;
     }
 
     /**
      * Get the month overflow behavior.
-     *
-     * @return bool
      */
-    public static function shouldOverflowMonths()
+    public static function shouldOverflowMonths(): bool
     {
         return static::$monthsOverflow;
     }
@@ -222,10 +222,8 @@ class Carbon extends DateTime
      * @param \DateTimeZone|string|int|null $object
      *
      * @throws \InvalidArgumentException
-     *
-     * @return \DateTimeZone
      */
-    protected static function safeCreateDateTimeZone($object)
+    protected static function safeCreateDateTimeZone($object): DateTimeZone
     {
         if ($object === null) {
             // Don't return null... avoid Bug #52063 in PHP <5.3.6
@@ -237,7 +235,7 @@ class Carbon extends DateTime
         }
 
         if (\is_numeric($object)) {
-            $tzName = \timezone_name_from_abbr(null, $object * 3600, true);
+            $tzName = \timezone_name_from_abbr('', $object * 3600, 1);
 
             if ($tzName === false) {
                 throw new InvalidArgumentException('Unknown or bad timezone ('.$object.')');
@@ -265,10 +263,9 @@ class Carbon extends DateTime
      * Please see the testing aids section (specifically static::setTestNow())
      * for more on the possibility of this constructor returning a test instance.
      *
-     * @param string|null               $time
      * @param \DateTimeZone|string|null $tz
      */
-    public function __construct($time = null, $tz = null)
+    public function __construct(?string $time = null, $tz = null)
     {
         $time = $time ?: 'now';
         // If the class has a test now set and we are trying to create a now()
@@ -294,12 +291,8 @@ class Carbon extends DateTime
 
     /**
      * Create a Carbon instance from a DateTime one.
-     *
-     * @param \DateTime $dt
-     *
-     * @return static
      */
-    public static function instance(DateTime $dt)
+    public static function instance(DateTime $dt): self
     {
         if ($dt instanceof static) {
             return clone $dt;
@@ -315,12 +308,9 @@ class Carbon extends DateTime
      * as it allows you to do Carbon::parse('Monday next week')->fn() rather
      * than (new Carbon('Monday next week'))->fn().
      *
-     * @param string|null               $time
      * @param \DateTimeZone|string|null $tz
-     *
-     * @return static
      */
-    public static function parse($time = null, $tz = null)
+    public static function parse(?string $time = null, $tz = null): self
     {
         return new static($time, $tz);
     }
@@ -329,10 +319,8 @@ class Carbon extends DateTime
      * Get a Carbon instance for the current date and time.
      *
      * @param \DateTimeZone|string|null $tz
-     *
-     * @return static
      */
-    public static function now($tz = null)
+    public static function now($tz = null): self
     {
         return new static(null, $tz);
     }
@@ -341,10 +329,8 @@ class Carbon extends DateTime
      * Create a Carbon instance for today.
      *
      * @param \DateTimeZone|string|null $tz
-     *
-     * @return static
      */
-    public static function today($tz = null)
+    public static function today($tz = null): self
     {
         return static::now($tz)->startOfDay();
     }
@@ -353,10 +339,8 @@ class Carbon extends DateTime
      * Create a Carbon instance for tomorrow.
      *
      * @param \DateTimeZone|string|null $tz
-     *
-     * @return static
      */
-    public static function tomorrow($tz = null)
+    public static function tomorrow($tz = null): self
     {
         return static::today($tz)->addDay();
     }
@@ -365,20 +349,16 @@ class Carbon extends DateTime
      * Create a Carbon instance for yesterday.
      *
      * @param \DateTimeZone|string|null $tz
-     *
-     * @return static
      */
-    public static function yesterday($tz = null)
+    public static function yesterday($tz = null): self
     {
         return static::today($tz)->subDay();
     }
 
     /**
      * Create a Carbon instance for the greatest supported date.
-     *
-     * @return static
      */
-    public static function maxValue()
+    public static function maxValue(): self
     {
         if (PHP_INT_SIZE === 4) {
             // 32 bit (and additionally Windows 64 bit)
@@ -391,10 +371,8 @@ class Carbon extends DateTime
 
     /**
      * Create a Carbon instance for the lowest supported date.
-     *
-     * @return static
      */
-    public static function minValue()
+    public static function minValue(): self
     {
         if (PHP_INT_SIZE === 4) {
             // 32 bit (and additionally Windows 64 bit)
@@ -417,17 +395,9 @@ class Carbon extends DateTime
      * If $hour is not null then the default values for $minute and $second
      * will be 0.
      *
-     * @param int|null                  $year
-     * @param int|null                  $month
-     * @param int|null                  $day
-     * @param int|null                  $hour
-     * @param int|null                  $minute
-     * @param int|null                  $second
      * @param \DateTimeZone|string|null $tz
-     *
-     * @return static
      */
-    public static function create($year = null, $month = null, $day = null, $hour = null, $minute = null, $second = null, $tz = null)
+    public static function create(?int $year = null, ?int $month = null, ?int $day = null, ?int $hour = null, ?int $minute = null, ?int $second = null, $tz = null): self
     {
         $now = static::$testNow ? static::$testNow->getTimestamp() : \time();
 
@@ -487,19 +457,11 @@ class Carbon extends DateTime
      * If one of the set values is not valid, an \InvalidArgumentException
      * will be thrown.
      *
-     * @param int|null                  $year
-     * @param int|null                  $month
-     * @param int|null                  $day
-     * @param int|null                  $hour
-     * @param int|null                  $minute
-     * @param int|null                  $second
      * @param \DateTimeZone|string|null $tz
      *
      * @throws \Carbon\Exceptions\InvalidDateException
-     *
-     * @return static
      */
-    public static function createSafe($year = null, $month = null, $day = null, $hour = null, $minute = null, $second = null, $tz = null)
+    public static function createSafe(?int $year = null, ?int $month = null, ?int $day = null, ?int $hour = null, ?int $minute = null, ?int $second = null, $tz = null): self
     {
         $fields = array(
             'year' => array(0, 9999),
@@ -528,14 +490,11 @@ class Carbon extends DateTime
     /**
      * Create a Carbon instance from just a date. The time portion is set to now.
      *
-     * @param int|null                  $year
-     * @param int|null                  $month
-     * @param int|null                  $day
      * @param \DateTimeZone|string|null $tz
      *
      * @return static
      */
-    public static function createFromDate($year = null, $month = null, $day = null, $tz = null)
+    public static function createFromDate(?int $year = null, ?int $month = null, ?int $day = null, $tz = null): self
     {
         return static::create($year, $month, $day, null, null, null, $tz);
     }
@@ -543,14 +502,9 @@ class Carbon extends DateTime
     /**
      * Create a Carbon instance from just a time. The date portion is set to today.
      *
-     * @param int|null                  $hour
-     * @param int|null                  $minute
-     * @param int|null                  $second
      * @param \DateTimeZone|string|null $tz
-     *
-     * @return static
      */
-    public static function createFromTime($hour = null, $minute = null, $second = null, $tz = null)
+    public static function createFromTime(?int $hour = null, ?int $minute = null, ?int $second = null, $tz = null): self
     {
         return static::create(null, null, null, $hour, $minute, $second, $tz);
     }
@@ -563,10 +517,8 @@ class Carbon extends DateTime
      * @param \DateTimeZone|string|null $tz
      *
      * @throws \InvalidArgumentException
-     *
-     * @return static
      */
-    public static function createFromFormat($format, $time, $tz = null)
+    public static function createFromFormat($format, $time, $tz = null): self
     {
         if ($tz !== null) {
             $dt = parent::createFromFormat($format, $time, static::safeCreateDateTimeZone($tz));
@@ -585,12 +537,8 @@ class Carbon extends DateTime
 
     /**
      * Set last errors.
-     *
-     * @param array $lastErrors
-     *
-     * @return void
      */
-    private static function setLastErrors(array $lastErrors)
+    private static function setLastErrors(array $lastErrors): void
     {
         static::$lastErrors = $lastErrors;
     }
@@ -606,34 +554,25 @@ class Carbon extends DateTime
     /**
      * Create a Carbon instance from a timestamp.
      *
-     * @param int                       $timestamp
      * @param \DateTimeZone|string|null $tz
-     *
-     * @return static
      */
-    public static function createFromTimestamp($timestamp, $tz = null)
+    public static function createFromTimestamp(int $timestamp, $tz = null): self
     {
         return static::now($tz)->setTimestamp($timestamp);
     }
 
     /**
      * Create a Carbon instance from an UTC timestamp.
-     *
-     * @param int $timestamp
-     *
-     * @return static
      */
-    public static function createFromTimestampUTC($timestamp)
+    public static function createFromTimestampUTC(int $timestamp): self
     {
         return new static('@'.$timestamp);
     }
 
     /**
      * Get a copy of the instance.
-     *
-     * @return static
      */
-    public function copy()
+    public function copy(): self
     {
         return clone $this;
     }
@@ -732,7 +671,7 @@ class Carbon extends DateTime
      *
      * @throws \InvalidArgumentException
      */
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         switch ($name) {
             case 'year':
@@ -743,7 +682,7 @@ class Carbon extends DateTime
             case 'second':
                 list($year, $month, $day, $hour, $minute, $second) = \explode('-', $this->format('Y-n-j-G-i-s'));
                 $$name = $value;
-                $this->setDateTime($year, $month, $day, $hour, $minute, $second);
+                $this->setDateTime((int) $year, (int) $month, (int) $day, (int) $hour, (int) $minute, (int) $second);
                 break;
 
             case 'timestamp':
@@ -762,12 +701,8 @@ class Carbon extends DateTime
 
     /**
      * Set the instance's year
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function year($value)
+    public function year(int $value): self
     {
         $this->year = $value;
 
@@ -776,12 +711,8 @@ class Carbon extends DateTime
 
     /**
      * Set the instance's month
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function month($value)
+    public function month(int $value): self
     {
         $this->month = $value;
 
@@ -790,12 +721,8 @@ class Carbon extends DateTime
 
     /**
      * Set the instance's day
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function day($value)
+    public function day(int $value): self
     {
         $this->day = $value;
 
@@ -804,12 +731,8 @@ class Carbon extends DateTime
 
     /**
      * Set the instance's hour
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function hour($value)
+    public function hour(int $value): self
     {
         $this->hour = $value;
 
@@ -818,12 +741,8 @@ class Carbon extends DateTime
 
     /**
      * Set the instance's minute
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function minute($value)
+    public function minute(int $value): self
     {
         $this->minute = $value;
 
@@ -832,12 +751,8 @@ class Carbon extends DateTime
 
     /**
      * Set the instance's second
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function second($value)
+    public function second(int $value): self
     {
         $this->second = $value;
 
@@ -848,16 +763,14 @@ class Carbon extends DateTime
      * Sets the current date of the DateTime object to a different date.
      * Calls modify as a workaround for a php bug
      *
+     * @see https://github.com/briannesbitt/Carbon/issues/539
+     * @see https://bugs.php.net/bug.php?id=63863
+     *
      * @param int $year
      * @param int $month
      * @param int $day
-     *
-     * @return static
-     *
-     * @see https://github.com/briannesbitt/Carbon/issues/539
-     * @see https://bugs.php.net/bug.php?id=63863
      */
-    public function setDate($year, $month, $day)
+    public function setDate($year, $month, $day): self
     {
         $this->modify('+0 day');
 
@@ -866,47 +779,30 @@ class Carbon extends DateTime
 
     /**
      * Set the date and time all together
-     *
-     * @param int $year
-     * @param int $month
-     * @param int $day
-     * @param int $hour
-     * @param int $minute
-     * @param int $second
-     *
-     * @return static
      */
-    public function setDateTime($year, $month, $day, $hour, $minute, $second = 0)
+    public function setDateTime(int $year, int $month, int $day, int $hour, int $minute, int $second = 0): self
     {
         return $this->setDate($year, $month, $day)->setTime($hour, $minute, $second);
     }
 
     /**
      * Set the time by time string
-     *
-     * @param string $time
-     *
-     * @return static
      */
-    public function setTimeFromTimeString($time)
+    public function setTimeFromTimeString(string $time): self
     {
         $time = \explode(':', $time);
 
-        $hour = $time[0];
-        $minute = isset($time[1]) ? $time[1] : 0;
-        $second = isset($time[2]) ? $time[2] : 0;
+        $hour = (int) $time[0];
+        $minute = isset($time[1]) ? (int) $time[1] : 0;
+        $second = isset($time[2]) ? (int) $time[2] : 0;
 
         return $this->setTime($hour, $minute, $second);
     }
 
     /**
      * Set the instance's timestamp
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function timestamp($value)
+    public function timestamp(int $value): self
     {
         return $this->setTimestamp($value);
     }
@@ -915,10 +811,8 @@ class Carbon extends DateTime
      * Alias for setTimezone()
      *
      * @param \DateTimeZone|string $value
-     *
-     * @return static
      */
-    public function timezone($value)
+    public function timezone($value): self
     {
         return $this->setTimezone($value);
     }
@@ -927,10 +821,8 @@ class Carbon extends DateTime
      * Alias for setTimezone()
      *
      * @param \DateTimeZone|string $value
-     *
-     * @return static
      */
-    public function tz($value)
+    public function tz($value): self
     {
         return $this->setTimezone($value);
     }
@@ -939,20 +831,16 @@ class Carbon extends DateTime
      * Set the instance's timezone from a string or object
      *
      * @param \DateTimeZone|string $value
-     *
-     * @return static
      */
-    public function setTimezone($value)
+    public function setTimezone($value): self
     {
         return parent::setTimezone(static::safeCreateDateTimeZone($value));
     }
 
     /**
      * Get the days of the week
-     *
-     * @return array
      */
-    public static function getDays()
+    public static function getDays(): array
     {
         return static::$days;
     }
@@ -963,40 +851,32 @@ class Carbon extends DateTime
 
     /**
      * Get the first day of week
-     *
-     * @return int
      */
-    public static function getWeekStartsAt()
+    public static function getWeekStartsAt(): int
     {
         return static::$weekStartsAt;
     }
 
     /**
      * Set the first day of week
-     *
-     * @param int $day
      */
-    public static function setWeekStartsAt($day)
+    public static function setWeekStartsAt(int $day): void
     {
         static::$weekStartsAt = $day;
     }
 
     /**
      * Get the last day of week
-     *
-     * @return int
      */
-    public static function getWeekEndsAt()
+    public static function getWeekEndsAt(): int
     {
         return static::$weekEndsAt;
     }
 
     /**
      * Set the last day of week
-     *
-     * @param int $day
      */
-    public static function setWeekEndsAt($day)
+    public static function setWeekEndsAt(int $day): void
     {
         static::$weekEndsAt = $day;
     }
@@ -1006,17 +886,15 @@ class Carbon extends DateTime
      *
      * @return array
      */
-    public static function getWeekendDays()
+    public static function getWeekendDays(): array
     {
         return static::$weekendDays;
     }
 
     /**
      * Set weekend days
-     *
-     * @param array $days
      */
-    public static function setWeekendDays($days)
+    public static function setWeekendDays(array $days): void
     {
         static::$weekendDays = $days;
     }
@@ -1042,7 +920,7 @@ class Carbon extends DateTime
      *
      * @param \Carbon\Carbon|string|null $testNow
      */
-    public static function setTestNow($testNow = null)
+    public static function setTestNow($testNow = null): void
     {
         static::$testNow = \is_string($testNow) ? static::parse($testNow) : $testNow;
     }
@@ -1053,7 +931,7 @@ class Carbon extends DateTime
      *
      * @return static|null the current instance used for testing
      */
-    public static function getTestNow()
+    public static function getTestNow(): ?self
     {
         return static::$testNow;
     }
@@ -1064,7 +942,7 @@ class Carbon extends DateTime
      *
      * @return bool true if there is a test instance, otherwise false
      */
-    public static function hasTestNow()
+    public static function hasTestNow(): bool
     {
         return static::getTestNow() !== null;
     }
@@ -1073,11 +951,9 @@ class Carbon extends DateTime
      * Determine if there is a relative keyword in the time string, this is to
      * create dates relative to now for test instances. e.g.: next tuesday
      *
-     * @param string|null $time
-     *
      * @return bool true if there is a keyword, otherwise false
      */
-    public static function hasRelativeKeywords($time)
+    public static function hasRelativeKeywords(string $time): bool
     {
         // skip common format with a '-' in it
         if (\preg_match('/\d{4}-\d{1,2}-\d{1,2}/', $time) !== 1) {
@@ -1097,10 +973,8 @@ class Carbon extends DateTime
 
     /**
      * Initialize the translator instance if necessary.
-     *
-     * @return \Symfony\Component\Translation\TranslatorInterface
      */
-    protected static function translator()
+    protected static function translator(): TranslatorInterface
     {
         if (static::$translator === null) {
             $translator = new Translator('en');
@@ -1114,42 +988,32 @@ class Carbon extends DateTime
 
     /**
      * Get the translator instance in use
-     *
-     * @return \Symfony\Component\Translation\TranslatorInterface
      */
-    public static function getTranslator()
+    public static function getTranslator(): TranslatorInterface
     {
         return static::translator();
     }
 
     /**
      * Set the translator instance to use
-     *
-     * @param \Symfony\Component\Translation\TranslatorInterface $translator
      */
-    public static function setTranslator(TranslatorInterface $translator)
+    public static function setTranslator(TranslatorInterface $translator): void
     {
         static::$translator = $translator;
     }
 
     /**
      * Get the current translator locale
-     *
-     * @return string
      */
-    public static function getLocale()
+    public static function getLocale(): string
     {
         return static::translator()->getLocale();
     }
 
     /**
      * Set the current translator locale and indicate if the source locale file exists
-     *
-     * @param string $locale
-     *
-     * @return bool
      */
-    public static function setLocale($locale)
+    public static function setLocale(string $locale): bool
     {
         $locale = \preg_replace_callback('/\b([a-z]{2})[-_](?:([a-z]{4})[-_])?([a-z]{2})\b/', function ($matches) {
             return $matches[1].'_'.(!empty($matches[2]) ? \ucfirst($matches[2]).'_' : '').\strtoupper($matches[3]);
@@ -1179,7 +1043,7 @@ class Carbon extends DateTime
      *
      * @param bool $utf8
      */
-    public static function setUtf8($utf8)
+    public static function setUtf8(bool $utf8): void
     {
         static::$utf8 = $utf8;
     }
@@ -1187,12 +1051,8 @@ class Carbon extends DateTime
     /**
      * Format the instance with the current locale.  You can set the current
      * locale using setlocale() http://php.net/setlocale.
-     *
-     * @param string $format
-     *
-     * @return string
      */
-    public function formatLocalized($format)
+    public function formatLocalized(string $format): string
     {
         // Check for Windows to find and replace the %e
         // modifier correctly
@@ -1200,7 +1060,7 @@ class Carbon extends DateTime
             $format = \preg_replace('#(?<!%)((?:%%)*)%e#', '\1%#d', $format);
         }
 
-        $formatted = \strftime($format, \strtotime($this));
+        $formatted = \strftime($format, \strtotime((string) $this));
 
         return static::$utf8 ? \utf8_encode($formatted) : $formatted;
     }
@@ -1208,25 +1068,21 @@ class Carbon extends DateTime
     /**
      * Reset the format used to the default when type juggling a Carbon instance to a string
      */
-    public static function resetToStringFormat()
+    public static function resetToStringFormat(): void
     {
         static::setToStringFormat(static::DEFAULT_TO_STRING_FORMAT);
     }
 
     /**
      * Set the default format used when type juggling a Carbon instance to a string
-     *
-     * @param string $format
      */
-    public static function setToStringFormat($format)
+    public static function setToStringFormat(string $format): void
     {
         static::$toStringFormat = $format;
     }
 
     /**
      * Format the instance as a string using the set format
-     *
-     * @return string
      */
     public function __toString()
     {
@@ -1235,160 +1091,128 @@ class Carbon extends DateTime
 
     /**
      * Format the instance as date
-     *
-     * @return string
      */
-    public function toDateString()
+    public function toDateString(): string
     {
         return $this->format('Y-m-d');
     }
 
     /**
      * Format the instance as a readable date
-     *
-     * @return string
      */
-    public function toFormattedDateString()
+    public function toFormattedDateString(): string
     {
         return $this->format('M j, Y');
     }
 
     /**
      * Format the instance as time
-     *
-     * @return string
      */
-    public function toTimeString()
+    public function toTimeString(): string
     {
         return $this->format('H:i:s');
     }
 
     /**
      * Format the instance as date and time
-     *
-     * @return string
      */
-    public function toDateTimeString()
+    public function toDateTimeString(): string
     {
         return $this->format('Y-m-d H:i:s');
     }
 
     /**
      * Format the instance with day, date and time
-     *
-     * @return string
      */
-    public function toDayDateTimeString()
+    public function toDayDateTimeString(): string
     {
         return $this->format('D, M j, Y g:i A');
     }
 
     /**
      * Format the instance as ATOM
-     *
-     * @return string
      */
-    public function toAtomString()
+    public function toAtomString(): string
     {
         return $this->format(static::ATOM);
     }
 
     /**
      * Format the instance as COOKIE
-     *
-     * @return string
      */
-    public function toCookieString()
+    public function toCookieString(): string
     {
         return $this->format(static::COOKIE);
     }
 
     /**
      * Format the instance as ISO8601
-     *
-     * @return string
      */
-    public function toIso8601String()
+    public function toIso8601String(): string
     {
         return $this->toAtomString();
     }
 
     /**
      * Format the instance as RFC822
-     *
-     * @return string
      */
-    public function toRfc822String()
+    public function toRfc822String(): string
     {
         return $this->format(static::RFC822);
     }
 
     /**
      * Format the instance as RFC850
-     *
-     * @return string
      */
-    public function toRfc850String()
+    public function toRfc850String(): string
     {
         return $this->format(static::RFC850);
     }
 
     /**
      * Format the instance as RFC1036
-     *
-     * @return string
      */
-    public function toRfc1036String()
+    public function toRfc1036String(): string
     {
         return $this->format(static::RFC1036);
     }
 
     /**
      * Format the instance as RFC1123
-     *
-     * @return string
      */
-    public function toRfc1123String()
+    public function toRfc1123String(): string
     {
         return $this->format(static::RFC1123);
     }
 
     /**
      * Format the instance as RFC2822
-     *
-     * @return string
      */
-    public function toRfc2822String()
+    public function toRfc2822String(): string
     {
         return $this->format(static::RFC2822);
     }
 
     /**
      * Format the instance as RFC3339
-     *
-     * @return string
      */
-    public function toRfc3339String()
+    public function toRfc3339String(): string
     {
         return $this->format(static::RFC3339);
     }
 
     /**
      * Format the instance as RSS
-     *
-     * @return string
      */
-    public function toRssString()
+    public function toRssString(): string
     {
         return $this->format(static::RSS);
     }
 
     /**
      * Format the instance as W3C
-     *
-     * @return string
      */
-    public function toW3cString()
+    public function toW3cString(): string
     {
         return $this->format(static::W3C);
     }
@@ -1399,12 +1223,8 @@ class Carbon extends DateTime
 
     /**
      * Determines if the instance is equal to another
-     *
-     * @param Carbon $dt
-     *
-     * @return bool
      */
-    public function eq(self $dt)
+    public function eq(self $dt): bool
     {
         return $this->format('U') === $dt->format('U');
     }
@@ -1412,25 +1232,17 @@ class Carbon extends DateTime
     /**
      * Determines if the instance is equal to another
      *
-     * @param Carbon $dt
-     *
      * @see eq()
-     *
-     * @return bool
      */
-    public function equalTo(self $dt)
+    public function equalTo(self $dt): bool
     {
         return $this->eq($dt);
     }
 
     /**
      * Determines if the instance is not equal to another
-     *
-     * @param Carbon $dt
-     *
-     * @return bool
      */
-    public function ne(self $dt)
+    public function ne(self $dt): bool
     {
         return !$this->eq($dt);
     }
@@ -1438,25 +1250,17 @@ class Carbon extends DateTime
     /**
      * Determines if the instance is not equal to another
      *
-     * @param Carbon $dt
-     *
      * @see ne()
-     *
-     * @return bool
      */
-    public function notEqualTo(self $dt)
+    public function notEqualTo(self $dt): bool
     {
         return $this->ne($dt);
     }
 
     /**
      * Determines if the instance is greater (after) than another
-     *
-     * @param Carbon $dt
-     *
-     * @return bool
      */
-    public function gt(self $dt)
+    public function gt(self $dt): bool
     {
         return $this > $dt;
     }
@@ -1464,25 +1268,17 @@ class Carbon extends DateTime
     /**
      * Determines if the instance is greater (after) than another
      *
-     * @param Carbon $dt
-     *
      * @see gt()
-     *
-     * @return bool
      */
-    public function greaterThan(self $dt)
+    public function greaterThan(self $dt): bool
     {
         return $this->gt($dt);
     }
 
     /**
      * Determines if the instance is greater (after) than or equal to another
-     *
-     * @param Carbon $dt
-     *
-     * @return bool
      */
-    public function gte(self $dt)
+    public function gte(self $dt): bool
     {
         return $this >= $dt;
     }
@@ -1490,25 +1286,17 @@ class Carbon extends DateTime
     /**
      * Determines if the instance is greater (after) than or equal to another
      *
-     * @param Carbon $dt
-     *
      * @see gte()
-     *
-     * @return bool
      */
-    public function greaterThanOrEqualTo(self $dt)
+    public function greaterThanOrEqualTo(self $dt): bool
     {
         return $this->gte($dt);
     }
 
     /**
      * Determines if the instance is less (before) than another
-     *
-     * @param Carbon $dt
-     *
-     * @return bool
      */
-    public function lt(self $dt)
+    public function lt(self $dt): bool
     {
         return $this < $dt;
     }
@@ -1516,25 +1304,17 @@ class Carbon extends DateTime
     /**
      * Determines if the instance is less (before) than another
      *
-     * @param Carbon $dt
-     *
      * @see lt()
-     *
-     * @return bool
      */
-    public function lessThan(self $dt)
+    public function lessThan(self $dt): bool
     {
         return $this->lt($dt);
     }
 
     /**
      * Determines if the instance is less (before) or equal to another
-     *
-     * @param Carbon $dt
-     *
-     * @return bool
      */
-    public function lte(self $dt)
+    public function lte(self $dt): bool
     {
         return $this <= $dt;
     }
@@ -1542,13 +1322,9 @@ class Carbon extends DateTime
     /**
      * Determines if the instance is less (before) or equal to another
      *
-     * @param Carbon $dt
-     *
      * @see lte()
-     *
-     * @return bool
      */
-    public function lessThanOrEqualTo(self $dt)
+    public function lessThanOrEqualTo(self $dt): bool
     {
         return $this->lte($dt);
     }
@@ -1556,13 +1332,9 @@ class Carbon extends DateTime
     /**
      * Determines if the instance is between two others
      *
-     * @param Carbon $dt1
-     * @param Carbon $dt2
-     * @param bool   $equal Indicates if a > and < comparison should be used or <= or >=
-     *
-     * @return bool
+     * @param bool $equal Indicates if a > and < comparison should be used or <= or >=
      */
-    public function between(self $dt1, self $dt2, $equal = true)
+    public function between(self $dt1, self $dt2, bool $equal = true): bool
     {
         if ($dt1->gt($dt2)) {
             $temp = $dt1;
@@ -1579,38 +1351,24 @@ class Carbon extends DateTime
 
     /**
      * Get the closest date from the instance.
-     *
-     * @param Carbon $dt1
-     * @param Carbon $dt2
-     *
-     * @return static
      */
-    public function closest(self $dt1, self $dt2)
+    public function closest(self $dt1, self $dt2): self
     {
         return $this->diffInSeconds($dt1) < $this->diffInSeconds($dt2) ? $dt1 : $dt2;
     }
 
     /**
      * Get the farthest date from the instance.
-     *
-     * @param Carbon $dt1
-     * @param Carbon $dt2
-     *
-     * @return static
      */
-    public function farthest(self $dt1, self $dt2)
+    public function farthest(self $dt1, self $dt2): self
     {
         return $this->diffInSeconds($dt1) > $this->diffInSeconds($dt2) ? $dt1 : $dt2;
     }
 
     /**
      * Get the minimum instance between a given instance (default now) and the current instance.
-     *
-     * @param \Carbon\Carbon|null $dt
-     *
-     * @return static
      */
-    public function min(self $dt = null)
+    public function min(self $dt = null): self
     {
         $dt = $dt ?: static::now($this->getTimezone());
 
@@ -1620,25 +1378,17 @@ class Carbon extends DateTime
     /**
      * Get the minimum instance between a given instance (default now) and the current instance.
      *
-     * @param \Carbon\Carbon|null $dt
-     *
      * @see min()
-     *
-     * @return static
      */
-    public function minimum(self $dt = null)
+    public function minimum(self $dt = null): self
     {
         return $this->min($dt);
     }
 
     /**
      * Get the maximum instance between a given instance (default now) and the current instance.
-     *
-     * @param \Carbon\Carbon|null $dt
-     *
-     * @return static
      */
-    public function max(self $dt = null)
+    public function max(self $dt = null): self
     {
         $dt = $dt ?: static::now($this->getTimezone());
 
@@ -1648,153 +1398,121 @@ class Carbon extends DateTime
     /**
      * Get the maximum instance between a given instance (default now) and the current instance.
      *
-     * @param \Carbon\Carbon|null $dt
-     *
      * @see max()
-     *
-     * @return static
      */
-    public function maximum(self $dt = null)
+    public function maximum(self $dt = null): self
     {
         return $this->max($dt);
     }
 
     /**
      * Determines if the instance is a weekday
-     *
-     * @return bool
      */
-    public function isWeekday()
+    public function isWeekday(): bool
     {
         return !$this->isWeekend();
     }
 
     /**
      * Determines if the instance is a weekend day
-     *
-     * @return bool
      */
-    public function isWeekend()
+    public function isWeekend(): bool
     {
         return \in_array($this->dayOfWeek, static::$weekendDays);
     }
 
     /**
      * Determines if the instance is yesterday
-     *
-     * @return bool
      */
-    public function isYesterday()
+    public function isYesterday(): bool
     {
         return $this->toDateString() === static::yesterday($this->getTimezone())->toDateString();
     }
 
     /**
      * Determines if the instance is today
-     *
-     * @return bool
      */
-    public function isToday()
+    public function isToday(): bool
     {
         return $this->toDateString() === static::now($this->getTimezone())->toDateString();
     }
 
     /**
      * Determines if the instance is tomorrow
-     *
-     * @return bool
      */
-    public function isTomorrow()
+    public function isTomorrow(): bool
     {
         return $this->toDateString() === static::tomorrow($this->getTimezone())->toDateString();
     }
 
     /**
      * Determines if the instance is within the next week
-     *
-     * @return bool
      */
-    public function isNextWeek()
+    public function isNextWeek(): bool
     {
         return $this->weekOfYear === static::now($this->getTimezone())->addWeek()->weekOfYear;
     }
 
     /**
      * Determines if the instance is within the last week
-     *
-     * @return bool
      */
-    public function isLastWeek()
+    public function isLastWeek(): bool
     {
         return $this->weekOfYear === static::now($this->getTimezone())->subWeek()->weekOfYear;
     }
 
     /**
      * Determines if the instance is within the next month
-     *
-     * @return bool
      */
-    public function isNextMonth()
+    public function isNextMonth(): bool
     {
         return $this->month === static::now($this->getTimezone())->addMonthNoOverflow()->month;
     }
 
     /**
      * Determines if the instance is within the last month
-     *
-     * @return bool
      */
-    public function isLastMonth()
+    public function isLastMonth(): bool
     {
         return $this->month === static::now($this->getTimezone())->subMonthNoOverflow()->month;
     }
 
     /**
      * Determines if the instance is within next year
-     *
-     * @return bool
      */
-    public function isNextYear()
+    public function isNextYear(): bool
     {
         return $this->year === static::now($this->getTimezone())->addYear()->year;
     }
 
     /**
      * Determines if the instance is within the previous year
-     *
-     * @return bool
      */
-    public function isLastYear()
+    public function isLastYear(): bool
     {
         return $this->year === static::now($this->getTimezone())->subYear()->year;
     }
 
     /**
      * Determines if the instance is in the future, ie. greater (after) than now
-     *
-     * @return bool
      */
-    public function isFuture()
+    public function isFuture(): bool
     {
         return $this->gt(static::now($this->getTimezone()));
     }
 
     /**
      * Determines if the instance is in the past, ie. less (before) than now
-     *
-     * @return bool
      */
-    public function isPast()
+    public function isPast(): bool
     {
         return $this->lt(static::now($this->getTimezone()));
     }
 
     /**
      * Determines if the instance is a leap year
-     *
-     * @return bool
      */
-    public function isLeapYear()
+    public function isLeapYear(): bool
     {
         return $this->format('L') === '1';
     }
@@ -1803,10 +1521,8 @@ class Carbon extends DateTime
      * Determines if the instance is a long year
      *
      * @see https://en.wikipedia.org/wiki/ISO_8601#Week_dates
-     *
-     * @return bool
      */
-    public function isLongYear()
+    public function isLongYear(): bool
     {
         return static::create($this->year, 12, 28, 0, 0, 0, $this->tz)->weekOfYear === 53;
     }
@@ -1816,10 +1532,8 @@ class Carbon extends DateTime
      *
      * @param string              $format The date formats to compare.
      * @param \Carbon\Carbon|null $dt     The instance to compare with or null to use current day.
-     *
-     * @return bool
      */
-    public function isSameAs($format, self $dt = null)
+    public function isSameAs(string $format, ?self $dt = null): bool
     {
         $dt = $dt ?: static::now($this->tz);
 
@@ -1828,10 +1542,8 @@ class Carbon extends DateTime
 
     /**
      * Determines if the instance is in the current year
-     *
-     * @return bool
      */
-    public function isCurrentYear()
+    public function isCurrentYear(): bool
     {
         return $this->isSameYear();
     }
@@ -1840,20 +1552,16 @@ class Carbon extends DateTime
      * Checks if the passed in date is in the same year as the instance year.
      *
      * @param \Carbon\Carbon|null $dt The instance to compare with or null to use current day.
-     *
-     * @return bool
      */
-    public function isSameYear(self $dt = null)
+    public function isSameYear(self $dt = null): bool
     {
         return $this->isSameAs('Y', $dt);
     }
 
     /**
      * Determines if the instance is in the current month
-     *
-     * @return bool
      */
-    public function isCurrentMonth()
+    public function isCurrentMonth(): bool
     {
         return $this->isSameMonth();
     }
@@ -1863,10 +1571,8 @@ class Carbon extends DateTime
      *
      * @param \Carbon\Carbon|null $dt         The instance to compare with or null to use current day.
      * @param bool                $ofSameYear Check if it is the same month in the same year.
-     *
-     * @return bool
      */
-    public function isSameMonth(self $dt = null, $ofSameYear = false)
+    public function isSameMonth(self $dt = null, $ofSameYear = false): bool
     {
         $format = $ofSameYear ? 'Y-m' : 'm';
 
@@ -1875,82 +1581,64 @@ class Carbon extends DateTime
 
     /**
      * Checks if the passed in date is the same day as the instance current day.
-     *
-     * @param \Carbon\Carbon $dt
-     *
-     * @return bool
      */
-    public function isSameDay(self $dt)
+    public function isSameDay(self $dt): bool
     {
         return $this->toDateString() === $dt->toDateString();
     }
 
     /**
      * Checks if this day is a Sunday.
-     *
-     * @return bool
      */
-    public function isSunday()
+    public function isSunday(): bool
     {
         return $this->dayOfWeek === static::SUNDAY;
     }
 
     /**
      * Checks if this day is a Monday.
-     *
-     * @return bool
      */
-    public function isMonday()
+    public function isMonday(): bool
     {
         return $this->dayOfWeek === static::MONDAY;
     }
 
     /**
      * Checks if this day is a Tuesday.
-     *
-     * @return bool
      */
-    public function isTuesday()
+    public function isTuesday(): bool
     {
         return $this->dayOfWeek === static::TUESDAY;
     }
 
     /**
      * Checks if this day is a Wednesday.
-     *
-     * @return bool
      */
-    public function isWednesday()
+    public function isWednesday(): bool
     {
         return $this->dayOfWeek === static::WEDNESDAY;
     }
 
     /**
      * Checks if this day is a Thursday.
-     *
-     * @return bool
      */
-    public function isThursday()
+    public function isThursday(): bool
     {
         return $this->dayOfWeek === static::THURSDAY;
     }
 
     /**
      * Checks if this day is a Friday.
-     *
-     * @return bool
      */
-    public function isFriday()
+    public function isFriday(): bool
     {
         return $this->dayOfWeek === static::FRIDAY;
     }
 
     /**
      * Checks if this day is a Saturday.
-     *
-     * @return bool
      */
-    public function isSaturday()
+    public function isSaturday(): bool
     {
         return $this->dayOfWeek === static::SATURDAY;
     }
@@ -1962,48 +1650,32 @@ class Carbon extends DateTime
     /**
      * Add years to the instance. Positive $value travel forward while
      * negative $value travel into the past.
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addYears($value)
+    public function addYears(int $value): self
     {
-        return $this->modify((int) $value.' year');
+        return $this->modify($value.' year');
     }
 
     /**
      * Add a year to the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addYear($value = 1)
+    public function addYear(int $value = 1): self
     {
         return $this->addYears($value);
     }
 
     /**
      * Remove a year from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subYear($value = 1)
+    public function subYear(int $value = 1): self
     {
         return $this->subYears($value);
     }
 
     /**
      * Remove years from the instance.
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subYears($value)
+    public function subYears(int $value): self
     {
         return $this->addYears(-1 * $value);
     }
@@ -2011,48 +1683,32 @@ class Carbon extends DateTime
     /**
      * Add quarters to the instance. Positive $value travels forward while
      * negative $value travels into the past.
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addQuarters($value)
+    public function addQuarters(int $value): self
     {
         return $this->addMonths(static::MONTHS_PER_QUARTER * $value);
     }
 
     /**
      * Add a quarter to the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addQuarter($value = 1)
+    public function addQuarter(int $value = 1): self
     {
         return $this->addQuarters($value);
     }
 
     /**
      * Remove a quarter from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subQuarter($value = 1)
+    public function subQuarter(int $value = 1): self
     {
         return $this->subQuarters($value);
     }
 
     /**
      * Remove quarters from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subQuarters($value)
+    public function subQuarters(int $value): self
     {
         return $this->addQuarters(-1 * $value);
     }
@@ -2060,48 +1716,32 @@ class Carbon extends DateTime
     /**
      * Add centuries to the instance. Positive $value travels forward while
      * negative $value travels into the past.
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addCenturies($value)
+    public function addCenturies(int $value): self
     {
         return $this->addYears(static::YEARS_PER_CENTURY * $value);
     }
 
     /**
      * Add a century to the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addCentury($value = 1)
+    public function addCentury(int $value = 1): self
     {
         return $this->addCenturies($value);
     }
 
     /**
      * Remove a century from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subCentury($value = 1)
+    public function subCentury(int $value = 1): self
     {
         return $this->subCenturies($value);
     }
 
     /**
      * Remove centuries from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subCenturies($value)
+    public function subCenturies(int $value): self
     {
         return $this->addCenturies(-1 * $value);
     }
@@ -2109,12 +1749,8 @@ class Carbon extends DateTime
     /**
      * Add months to the instance. Positive $value travels forward while
      * negative $value travels into the past.
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addMonths($value)
+    public function addMonths(int $value): self
     {
         if (static::shouldOverflowMonths()) {
             return $this->addMonthsWithOverflow($value);
@@ -2125,36 +1761,24 @@ class Carbon extends DateTime
 
     /**
      * Add a month to the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addMonth($value = 1)
+    public function addMonth(int $value = 1): self
     {
         return $this->addMonths($value);
     }
 
     /**
      * Remove a month from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subMonth($value = 1)
+    public function subMonth(int $value = 1): self
     {
         return $this->subMonths($value);
     }
 
     /**
      * Remove months from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subMonths($value)
+    public function subMonths(int $value): self
     {
         return $this->addMonths(-1 * $value);
     }
@@ -2162,48 +1786,32 @@ class Carbon extends DateTime
     /**
      * Add months to the instance. Positive $value travels forward while
      * negative $value travels into the past.
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addMonthsWithOverflow($value)
+    public function addMonthsWithOverflow(int $value): self
     {
-        return $this->modify((int) $value.' month');
+        return $this->modify($value.' month');
     }
 
     /**
      * Add a month to the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addMonthWithOverflow($value = 1)
+    public function addMonthWithOverflow(int $value = 1): self
     {
         return $this->addMonthsWithOverflow($value);
     }
 
     /**
      * Remove a month from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subMonthWithOverflow($value = 1)
+    public function subMonthWithOverflow(int $value = 1): self
     {
         return $this->subMonthsWithOverflow($value);
     }
 
     /**
      * Remove months from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subMonthsWithOverflow($value)
+    public function subMonthsWithOverflow(int $value): self
     {
         return $this->addMonthsWithOverflow(-1 * $value);
     }
@@ -2211,16 +1819,12 @@ class Carbon extends DateTime
     /**
      * Add months without overflowing to the instance. Positive $value
      * travels forward while negative $value travels into the past.
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addMonthsNoOverflow($value)
+    public function addMonthsNoOverflow(int $value): self
     {
         $day = $this->day;
 
-        $this->modify((int) $value.' month');
+        $this->modify($value.' month');
 
         if ($day !== $this->day) {
             $this->modify('last day of previous month');
@@ -2231,36 +1835,24 @@ class Carbon extends DateTime
 
     /**
      * Add a month with no overflow to the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addMonthNoOverflow($value = 1)
+    public function addMonthNoOverflow(int $value = 1): self
     {
         return $this->addMonthsNoOverflow($value);
     }
 
     /**
      * Remove a month with no overflow from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subMonthNoOverflow($value = 1)
+    public function subMonthNoOverflow(int $value = 1): self
     {
         return $this->subMonthsNoOverflow($value);
     }
 
     /**
      * Remove months with no overflow from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subMonthsNoOverflow($value)
+    public function subMonthsNoOverflow(int $value): self
     {
         return $this->addMonthsNoOverflow(-1 * $value);
     }
@@ -2268,48 +1860,32 @@ class Carbon extends DateTime
     /**
      * Add days to the instance. Positive $value travels forward while
      * negative $value travels into the past.
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addDays($value)
+    public function addDays(int $value): self
     {
-        return $this->modify((int) $value.' day');
+        return $this->modify($value.' day');
     }
 
     /**
      * Add a day to the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addDay($value = 1)
+    public function addDay(int $value = 1): self
     {
         return $this->addDays($value);
     }
 
     /**
      * Remove a day from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subDay($value = 1)
+    public function subDay(int $value = 1): self
     {
         return $this->subDays($value);
     }
 
     /**
      * Remove days from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subDays($value)
+    public function subDays(int $value): self
     {
         return $this->addDays(-1 * $value);
     }
@@ -2317,52 +1893,36 @@ class Carbon extends DateTime
     /**
      * Add weekdays to the instance. Positive $value travels forward while
      * negative $value travels into the past.
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addWeekdays($value)
+    public function addWeekdays(int $value): self
     {
         // fix for https://bugs.php.net/bug.php?id=54909
         $t = $this->toTimeString();
-        $this->modify((int) $value.' weekday');
+        $this->modify($value.' weekday');
 
         return $this->setTimeFromTimeString($t);
     }
 
     /**
      * Add a weekday to the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addWeekday($value = 1)
+    public function addWeekday(int $value = 1): self
     {
         return $this->addWeekdays($value);
     }
 
     /**
      * Remove a weekday from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subWeekday($value = 1)
+    public function subWeekday(int $value = 1): self
     {
         return $this->subWeekdays($value);
     }
 
     /**
      * Remove weekdays from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subWeekdays($value)
+    public function subWeekdays(int $value): self
     {
         return $this->addWeekdays(-1 * $value);
     }
@@ -2370,48 +1930,32 @@ class Carbon extends DateTime
     /**
      * Add weeks to the instance. Positive $value travels forward while
      * negative $value travels into the past.
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addWeeks($value)
+    public function addWeeks(int $value): self
     {
-        return $this->modify((int) $value.' week');
+        return $this->modify($value.' week');
     }
 
     /**
      * Add a week to the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addWeek($value = 1)
+    public function addWeek(int $value = 1): self
     {
         return $this->addWeeks($value);
     }
 
     /**
      * Remove a week from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subWeek($value = 1)
+    public function subWeek(int $value = 1): self
     {
         return $this->subWeeks($value);
     }
 
     /**
      * Remove weeks to the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subWeeks($value)
+    public function subWeeks(int $value): self
     {
         return $this->addWeeks(-1 * $value);
     }
@@ -2419,48 +1963,32 @@ class Carbon extends DateTime
     /**
      * Add hours to the instance. Positive $value travels forward while
      * negative $value travels into the past.
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addHours($value)
+    public function addHours(int $value): self
     {
-        return $this->modify((int) $value.' hour');
+        return $this->modify($value.' hour');
     }
 
     /**
      * Add an hour to the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addHour($value = 1)
+    public function addHour(int $value = 1): self
     {
         return $this->addHours($value);
     }
 
     /**
      * Remove an hour from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subHour($value = 1)
+    public function subHour(int $value = 1): self
     {
         return $this->subHours($value);
     }
 
     /**
      * Remove hours from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subHours($value)
+    public function subHours(int $value): self
     {
         return $this->addHours(-1 * $value);
     }
@@ -2468,48 +1996,32 @@ class Carbon extends DateTime
     /**
      * Add minutes to the instance. Positive $value travels forward while
      * negative $value travels into the past.
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addMinutes($value)
+    public function addMinutes(int $value): self
     {
-        return $this->modify((int) $value.' minute');
+        return $this->modify($value.' minute');
     }
 
     /**
      * Add a minute to the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addMinute($value = 1)
+    public function addMinute(int $value = 1): self
     {
         return $this->addMinutes($value);
     }
 
     /**
      * Remove a minute from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subMinute($value = 1)
+    public function subMinute(int $value = 1): self
     {
         return $this->subMinutes($value);
     }
 
     /**
      * Remove minutes from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subMinutes($value)
+    public function subMinutes(int $value): self
     {
         return $this->addMinutes(-1 * $value);
     }
@@ -2517,48 +2029,32 @@ class Carbon extends DateTime
     /**
      * Add seconds to the instance. Positive $value travels forward while
      * negative $value travels into the past.
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addSeconds($value)
+    public function addSeconds(int $value): self
     {
-        return $this->modify((int) $value.' second');
+        return $this->modify($value.' second');
     }
 
     /**
      * Add a second to the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function addSecond($value = 1)
+    public function addSecond(int $value = 1): self
     {
         return $this->addSeconds($value);
     }
 
     /**
      * Remove a second from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subSecond($value = 1)
+    public function subSecond(int $value = 1): self
     {
         return $this->subSeconds($value);
     }
 
     /**
      * Remove seconds from the instance
-     *
-     * @param int $value
-     *
-     * @return static
      */
-    public function subSeconds($value)
+    public function subSeconds(int $value): self
     {
         return $this->addSeconds(-1 * $value);
     }
@@ -2570,12 +2066,11 @@ class Carbon extends DateTime
     /**
      * Get the difference in years
      *
-     * @param \Carbon\Carbon|null $dt
-     * @param bool                $abs Get the absolute of the difference
+     * @param bool $abs Get the absolute of the difference
      *
-     * @return int
+     * @return int|float
      */
-    public function diffInYears(self $dt = null, $abs = true)
+    public function diffInYears(?self $dt = null, bool $abs = true)
     {
         $dt = $dt ?: static::now($this->getTimezone());
 
@@ -2585,12 +2080,11 @@ class Carbon extends DateTime
     /**
      * Get the difference in months
      *
-     * @param \Carbon\Carbon|null $dt
-     * @param bool                $abs Get the absolute of the difference
+     * @param bool $abs Get the absolute of the difference
      *
-     * @return int
+     * @return int|float
      */
-    public function diffInMonths(self $dt = null, $abs = true)
+    public function diffInMonths(?self $dt = null, bool $abs = true)
     {
         $dt = $dt ?: static::now($this->getTimezone());
 
@@ -2600,12 +2094,11 @@ class Carbon extends DateTime
     /**
      * Get the difference in weeks
      *
-     * @param \Carbon\Carbon|null $dt
-     * @param bool                $abs Get the absolute of the difference
+     * @param bool $abs Get the absolute of the difference
      *
-     * @return int
+     * @return int|float
      */
-    public function diffInWeeks(self $dt = null, $abs = true)
+    public function diffInWeeks(?self $dt = null, bool $abs = true)
     {
         return (int) ($this->diffInDays($dt, $abs) / static::DAYS_PER_WEEK);
     }
@@ -2613,12 +2106,11 @@ class Carbon extends DateTime
     /**
      * Get the difference in days
      *
-     * @param \Carbon\Carbon|null $dt
-     * @param bool                $abs Get the absolute of the difference
+     * @param bool $abs Get the absolute of the difference
      *
-     * @return int
+     * @return int|float
      */
-    public function diffInDays(self $dt = null, $abs = true)
+    public function diffInDays(?self $dt = null, bool $abs = true)
     {
         $dt = $dt ?: static::now($this->getTimezone());
 
@@ -2628,13 +2120,11 @@ class Carbon extends DateTime
     /**
      * Get the difference in days using a filter closure
      *
-     * @param Closure             $callback
-     * @param \Carbon\Carbon|null $dt
-     * @param bool                $abs      Get the absolute of the difference
+     * @param bool $abs Get the absolute of the difference
      *
-     * @return int
+     * @return int|float
      */
-    public function diffInDaysFiltered(Closure $callback, self $dt = null, $abs = true)
+    public function diffInDaysFiltered(Closure $callback, ?self $dt = null, bool $abs = true)
     {
         return $this->diffFiltered(CarbonInterval::day(), $callback, $dt, $abs);
     }
@@ -2642,13 +2132,11 @@ class Carbon extends DateTime
     /**
      * Get the difference in hours using a filter closure
      *
-     * @param Closure             $callback
-     * @param \Carbon\Carbon|null $dt
-     * @param bool                $abs      Get the absolute of the difference
+     * @param bool $abs Get the absolute of the difference
      *
-     * @return int
+     * @return int|float
      */
-    public function diffInHoursFiltered(Closure $callback, self $dt = null, $abs = true)
+    public function diffInHoursFiltered(Closure $callback, ?self $dt = null, bool $abs = true)
     {
         return $this->diffFiltered(CarbonInterval::hour(), $callback, $dt, $abs);
     }
@@ -2656,14 +2144,12 @@ class Carbon extends DateTime
     /**
      * Get the difference by the given interval using a filter closure
      *
-     * @param CarbonInterval $ci       An interval to traverse by
-     * @param Closure        $callback
-     * @param Carbon|null    $dt
-     * @param bool           $abs      Get the absolute of the difference
+     * @param CarbonInterval $ci  An interval to traverse by
+     * @param bool           $abs Get the absolute of the difference
      *
-     * @return int
+     * @return int|float
      */
-    public function diffFiltered(CarbonInterval $ci, Closure $callback, self $dt = null, $abs = true)
+    public function diffFiltered(CarbonInterval $ci, Closure $callback, ?self $dt = null, bool $abs = true)
     {
         $start = $this;
         $end = $dt ?: static::now($this->getTimezone());
@@ -2688,12 +2174,11 @@ class Carbon extends DateTime
     /**
      * Get the difference in weekdays
      *
-     * @param \Carbon\Carbon|null $dt
-     * @param bool                $abs Get the absolute of the difference
+     * @param bool $abs Get the absolute of the difference
      *
-     * @return int
+     * @return int|float
      */
-    public function diffInWeekdays(self $dt = null, $abs = true)
+    public function diffInWeekdays(?self $dt = null, bool $abs = true)
     {
         return $this->diffInDaysFiltered(function (Carbon $date) {
             return $date->isWeekday();
@@ -2703,12 +2188,11 @@ class Carbon extends DateTime
     /**
      * Get the difference in weekend days using a filter
      *
-     * @param \Carbon\Carbon|null $dt
-     * @param bool                $abs Get the absolute of the difference
+     * @param bool $abs Get the absolute of the difference
      *
-     * @return int
+     * @return int|float
      */
-    public function diffInWeekendDays(self $dt = null, $abs = true)
+    public function diffInWeekendDays(?self $dt = null, bool $abs = true)
     {
         return $this->diffInDaysFiltered(function (Carbon $date) {
             return $date->isWeekend();
@@ -2718,12 +2202,9 @@ class Carbon extends DateTime
     /**
      * Get the difference in hours
      *
-     * @param \Carbon\Carbon|null $dt
-     * @param bool                $abs Get the absolute of the difference
-     *
-     * @return int
+     * @param bool $abs Get the absolute of the difference
      */
-    public function diffInHours(self $dt = null, $abs = true)
+    public function diffInHours(?self $dt = null, bool $abs = true): int
     {
         return (int) ($this->diffInSeconds($dt, $abs) / static::SECONDS_PER_MINUTE / static::MINUTES_PER_HOUR);
     }
@@ -2731,12 +2212,9 @@ class Carbon extends DateTime
     /**
      * Get the difference in minutes
      *
-     * @param \Carbon\Carbon|null $dt
-     * @param bool                $abs Get the absolute of the difference
-     *
-     * @return int
+     * @param bool $abs Get the absolute of the difference
      */
-    public function diffInMinutes(self $dt = null, $abs = true)
+    public function diffInMinutes(?self $dt = null, bool $abs = true): int
     {
         return (int) ($this->diffInSeconds($dt, $abs) / static::SECONDS_PER_MINUTE);
     }
@@ -2744,35 +2222,28 @@ class Carbon extends DateTime
     /**
      * Get the difference in seconds
      *
-     * @param \Carbon\Carbon|null $dt
-     * @param bool                $abs Get the absolute of the difference
-     *
-     * @return int
+     * @param bool $abs Get the absolute of the difference
      */
-    public function diffInSeconds(self $dt = null, $abs = true)
+    public function diffInSeconds(?self $dt = null, $abs = true): int
     {
         $dt = $dt ?: static::now($this->getTimezone());
         $value = $dt->getTimestamp() - $this->getTimestamp();
 
-        return $abs ? \abs($value) : $value;
+        return (int) $abs ? \abs($value) : $value;
     }
 
     /**
      * The number of seconds since midnight.
-     *
-     * @return int
      */
-    public function secondsSinceMidnight()
+    public function secondsSinceMidnight(): int
     {
         return $this->diffInSeconds($this->copy()->startOfDay());
     }
 
     /**
      * The number of seconds until 23:59:59.
-     *
-     * @return int
      */
-    public function secondsUntilEndOfDay()
+    public function secondsUntilEndOfDay(): int
     {
         return $this->diffInSeconds($this->copy()->endOfDay());
     }
@@ -2796,13 +2267,12 @@ class Carbon extends DateTime
      * 1 hour after
      * 5 months after
      *
-     * @param Carbon|null $other
-     * @param bool        $absolute removes time difference modifiers ago, after, etc
-     * @param bool        $short    displays short format of time units
+     * @param bool $absolute removes time difference modifiers ago, after, etc
+     * @param bool $short    displays short format of time units
      *
      * @return string
      */
-    public function diffForHumans(self $other = null, $absolute = false, $short = false)
+    public function diffForHumans(?self $other = null, bool $absolute = false, bool $short = false): string
     {
         $isNow = $other === null;
 
@@ -2878,50 +2348,40 @@ class Carbon extends DateTime
 
     /**
      * Resets the time to 00:00:00
-     *
-     * @return static
      */
-    public function startOfDay()
+    public function startOfDay(): self
     {
         return $this->setTime(0, 0, 0);
     }
 
     /**
      * Resets the time to 23:59:59
-     *
-     * @return static
      */
-    public function endOfDay()
+    public function endOfDay(): self
     {
         return $this->setTime(23, 59, 59);
     }
 
     /**
      * Resets the date to the first day of the month and the time to 00:00:00
-     *
-     * @return static
      */
-    public function startOfMonth()
+    public function startOfMonth(): self
     {
         return $this->setDateTime($this->year, $this->month, 1, 0, 0, 0);
     }
 
     /**
      * Resets the date to end of the month and time to 23:59:59
-     *
-     * @return static
      */
-    public function endOfMonth()
+    public function endOfMonth(): self
     {
         return $this->setDateTime($this->year, $this->month, $this->daysInMonth, 23, 59, 59);
     }
 
     /**
      * Resets the date to the first day of the quarter and the time to 00:00:00
-     *
-     * @return static
      */
-    public function startOfQuarter()
+    public function startOfQuarter(): self
     {
         $month = ($this->quarter - 1) * static::MONTHS_PER_QUARTER + 1;
 
@@ -2930,40 +2390,32 @@ class Carbon extends DateTime
 
     /**
      * Resets the date to end of the quarter and time to 23:59:59
-     *
-     * @return static
      */
-    public function endOfQuarter()
+    public function endOfQuarter(): self
     {
         return $this->startOfQuarter()->addMonths(static::MONTHS_PER_QUARTER - 1)->endOfMonth();
     }
 
     /**
      * Resets the date to the first day of the year and the time to 00:00:00
-     *
-     * @return static
      */
-    public function startOfYear()
+    public function startOfYear(): self
     {
         return $this->setDateTime($this->year, 1, 1, 0, 0, 0);
     }
 
     /**
      * Resets the date to end of the year and time to 23:59:59
-     *
-     * @return static
      */
-    public function endOfYear()
+    public function endOfYear(): self
     {
         return $this->setDateTime($this->year, 12, 31, 23, 59, 59);
     }
 
     /**
      * Resets the date to the first day of the decade and the time to 00:00:00
-     *
-     * @return static
      */
-    public function startOfDecade()
+    public function startOfDecade(): self
     {
         $year = $this->year - $this->year % static::YEARS_PER_DECADE;
 
@@ -2972,10 +2424,8 @@ class Carbon extends DateTime
 
     /**
      * Resets the date to end of the decade and time to 23:59:59
-     *
-     * @return static
      */
-    public function endOfDecade()
+    public function endOfDecade(): self
     {
         $year = $this->year - $this->year % static::YEARS_PER_DECADE + static::YEARS_PER_DECADE - 1;
 
@@ -2984,10 +2434,8 @@ class Carbon extends DateTime
 
     /**
      * Resets the date to the first day of the century and the time to 00:00:00
-     *
-     * @return static
      */
-    public function startOfCentury()
+    public function startOfCentury(): self
     {
         $year = $this->year - ($this->year - 1) % static::YEARS_PER_CENTURY;
 
@@ -2996,10 +2444,8 @@ class Carbon extends DateTime
 
     /**
      * Resets the date to end of the century and time to 23:59:59
-     *
-     * @return static
      */
-    public function endOfCentury()
+    public function endOfCentury(): self
     {
         $year = $this->year - 1 - ($this->year - 1) % static::YEARS_PER_CENTURY + static::YEARS_PER_CENTURY;
 
@@ -3008,10 +2454,8 @@ class Carbon extends DateTime
 
     /**
      * Resets the date to the first day of week (defined in $weekStartsAt) and the time to 00:00:00
-     *
-     * @return static
      */
-    public function startOfWeek()
+    public function startOfWeek(): self
     {
         while ($this->dayOfWeek !== static::$weekStartsAt) {
             $this->subDay();
@@ -3022,10 +2466,8 @@ class Carbon extends DateTime
 
     /**
      * Resets the date to end of week (defined in $weekEndsAt) and time to 23:59:59
-     *
-     * @return static
      */
-    public function endOfWeek()
+    public function endOfWeek(): self
     {
         while ($this->dayOfWeek !== static::$weekEndsAt) {
             $this->addDay();
@@ -3039,12 +2481,8 @@ class Carbon extends DateTime
      * If no dayOfWeek is provided, modify to the next occurrence
      * of the current day of the week.  Use the supplied constants
      * to indicate the desired dayOfWeek, ex. static::MONDAY.
-     *
-     * @param int|null $dayOfWeek
-     *
-     * @return static
      */
-    public function next($dayOfWeek = null)
+    public function next(int $dayOfWeek = null): self
     {
         if ($dayOfWeek === null) {
             $dayOfWeek = $this->dayOfWeek;
@@ -3055,13 +2493,8 @@ class Carbon extends DateTime
 
     /**
      * Go forward or backward to the next week- or weekend-day.
-     *
-     * @param bool $weekday
-     * @param bool $forward
-     *
-     * @return $this
      */
-    private function nextOrPreviousDay($weekday = true, $forward = true)
+    private function nextOrPreviousDay(bool $weekday = true, bool $forward = true): self
     {
         $step = $forward ? 1 : -1;
 
@@ -3074,40 +2507,32 @@ class Carbon extends DateTime
 
     /**
      * Go forward to the next weekday.
-     *
-     * @return $this
      */
-    public function nextWeekday()
+    public function nextWeekday(): self
     {
         return $this->nextOrPreviousDay();
     }
 
     /**
      * Go backward to the previous weekday.
-     *
-     * @return $this
      */
-    public function previousWeekday()
+    public function previousWeekday(): self
     {
         return $this->nextOrPreviousDay(true, false);
     }
 
     /**
      * Go forward to the next weekend day.
-     *
-     * @return $this
      */
-    public function nextWeekendDay()
+    public function nextWeekendDay(): self
     {
         return $this->nextOrPreviousDay(false);
     }
 
     /**
      * Go backward to the previous weekend day.
-     *
-     * @return $this
      */
-    public function previousWeekendDay()
+    public function previousWeekendDay(): self
     {
         return $this->nextOrPreviousDay(false, false);
     }
@@ -3117,12 +2542,8 @@ class Carbon extends DateTime
      * If no dayOfWeek is provided, modify to the previous occurrence
      * of the current day of the week.  Use the supplied constants
      * to indicate the desired dayOfWeek, ex. static::MONDAY.
-     *
-     * @param int|null $dayOfWeek
-     *
-     * @return static
      */
-    public function previous($dayOfWeek = null)
+    public function previous(int $dayOfWeek = null): self
     {
         if ($dayOfWeek === null) {
             $dayOfWeek = $this->dayOfWeek;
@@ -3136,12 +2557,8 @@ class Carbon extends DateTime
      * in the current month. If no dayOfWeek is provided, modify to the
      * first day of the current month.  Use the supplied constants
      * to indicate the desired dayOfWeek, ex. static::MONDAY.
-     *
-     * @param int|null $dayOfWeek
-     *
-     * @return static
      */
-    public function firstOfMonth($dayOfWeek = null)
+    public function firstOfMonth(int $dayOfWeek = null): self
     {
         $this->startOfDay();
 
@@ -3157,12 +2574,8 @@ class Carbon extends DateTime
      * in the current month. If no dayOfWeek is provided, modify to the
      * last day of the current month.  Use the supplied constants
      * to indicate the desired dayOfWeek, ex. static::MONDAY.
-     *
-     * @param int|null $dayOfWeek
-     *
-     * @return static
      */
-    public function lastOfMonth($dayOfWeek = null)
+    public function lastOfMonth(int $dayOfWeek = null): self
     {
         $this->startOfDay();
 
@@ -3179,18 +2592,15 @@ class Carbon extends DateTime
      * of the current month, then return false and no modifications are made.
      * Use the supplied constants to indicate the desired dayOfWeek, ex. static::MONDAY.
      *
-     * @param int $nth
-     * @param int $dayOfWeek
-     *
      * @return mixed
      */
-    public function nthOfMonth($nth, $dayOfWeek)
+    public function nthOfMonth(int $nth, int $dayOfWeek)
     {
         $dt = $this->copy()->firstOfMonth();
         $check = $dt->format('Y-m');
         $dt->modify('+'.$nth.' '.static::$days[$dayOfWeek]);
 
-        return $dt->format('Y-m') === $check ? $this->modify($dt) : false;
+        return $dt->format('Y-m') === $check ? $this->modify((string) $dt) : false;
     }
 
     /**
@@ -3198,12 +2608,8 @@ class Carbon extends DateTime
      * in the current quarter. If no dayOfWeek is provided, modify to the
      * first day of the current quarter.  Use the supplied constants
      * to indicate the desired dayOfWeek, ex. static::MONDAY.
-     *
-     * @param int|null $dayOfWeek
-     *
-     * @return static
      */
-    public function firstOfQuarter($dayOfWeek = null)
+    public function firstOfQuarter(int $dayOfWeek = null): self
     {
         return $this->setDate($this->year, $this->quarter * static::MONTHS_PER_QUARTER - 2, 1)->firstOfMonth($dayOfWeek);
     }
@@ -3213,12 +2619,8 @@ class Carbon extends DateTime
      * in the current quarter. If no dayOfWeek is provided, modify to the
      * last day of the current quarter.  Use the supplied constants
      * to indicate the desired dayOfWeek, ex. static::MONDAY.
-     *
-     * @param int|null $dayOfWeek
-     *
-     * @return static
      */
-    public function lastOfQuarter($dayOfWeek = null)
+    public function lastOfQuarter(int $dayOfWeek = null): self
     {
         return $this->setDate($this->year, $this->quarter * static::MONTHS_PER_QUARTER, 1)->lastOfMonth($dayOfWeek);
     }
@@ -3229,19 +2631,16 @@ class Carbon extends DateTime
      * of the current quarter, then return false and no modifications are made.
      * Use the supplied constants to indicate the desired dayOfWeek, ex. static::MONDAY.
      *
-     * @param int $nth
-     * @param int $dayOfWeek
-     *
      * @return mixed
      */
-    public function nthOfQuarter($nth, $dayOfWeek)
+    public function nthOfQuarter(int $nth, int $dayOfWeek)
     {
         $dt = $this->copy()->day(1)->month($this->quarter * static::MONTHS_PER_QUARTER);
         $lastMonth = $dt->month;
         $year = $dt->year;
         $dt->firstOfQuarter()->modify('+'.$nth.' '.static::$days[$dayOfWeek]);
 
-        return ($lastMonth < $dt->month || $year !== $dt->year) ? false : $this->modify($dt);
+        return ($lastMonth < $dt->month || $year !== $dt->year) ? false : $this->modify((string) $dt);
     }
 
     /**
@@ -3249,12 +2648,8 @@ class Carbon extends DateTime
      * in the current year. If no dayOfWeek is provided, modify to the
      * first day of the current year.  Use the supplied constants
      * to indicate the desired dayOfWeek, ex. static::MONDAY.
-     *
-     * @param int|null $dayOfWeek
-     *
-     * @return static
      */
-    public function firstOfYear($dayOfWeek = null)
+    public function firstOfYear(int $dayOfWeek = null): self
     {
         return $this->month(1)->firstOfMonth($dayOfWeek);
     }
@@ -3264,12 +2659,8 @@ class Carbon extends DateTime
      * in the current year. If no dayOfWeek is provided, modify to the
      * last day of the current year.  Use the supplied constants
      * to indicate the desired dayOfWeek, ex. static::MONDAY.
-     *
-     * @param int|null $dayOfWeek
-     *
-     * @return static
      */
-    public function lastOfYear($dayOfWeek = null)
+    public function lastOfYear(int $dayOfWeek = null): self
     {
         return $this->month(static::MONTHS_PER_YEAR)->lastOfMonth($dayOfWeek);
     }
@@ -3280,26 +2671,19 @@ class Carbon extends DateTime
      * of the current year, then return false and no modifications are made.
      * Use the supplied constants to indicate the desired dayOfWeek, ex. static::MONDAY.
      *
-     * @param int $nth
-     * @param int $dayOfWeek
-     *
      * @return mixed
      */
-    public function nthOfYear($nth, $dayOfWeek)
+    public function nthOfYear(int $nth, int $dayOfWeek)
     {
         $dt = $this->copy()->firstOfYear()->modify('+'.$nth.' '.static::$days[$dayOfWeek]);
 
-        return $this->year === $dt->year ? $this->modify($dt) : false;
+        return $this->year === $dt->year ? $this->modify((string) $dt) : false;
     }
 
     /**
      * Modify the current instance to the average of a given instance (default now) and the current instance.
-     *
-     * @param \Carbon\Carbon|null $dt
-     *
-     * @return static
      */
-    public function average(self $dt = null)
+    public function average(?self $dt = null): self
     {
         $dt = $dt ?: static::now($this->getTimezone());
 
@@ -3310,10 +2694,8 @@ class Carbon extends DateTime
      * Check if its the birthday. Compares the date/month values of the two dates.
      *
      * @param \Carbon\Carbon|null $dt The instance to compare with or null to use current day.
-     *
-     * @return bool
      */
-    public function isBirthday(self $dt = null)
+    public function isBirthday(?self $dt = null): bool
     {
         return $this->isSameAs('md', $dt);
     }
@@ -3321,12 +2703,13 @@ class Carbon extends DateTime
     /**
      * Consider the timezone when modifying the instance.
      *
-     * @param string|null $modify
-     *
-     * @return static
+     * @param string $modify
      */
-    public function modify($modify)
+    public function modify($modify): self
     {
+        if (!\is_string($modify)) {
+            throw new InvalidArgumentException(\sprintf('%s requires a string or null, but %s was given.', __METHOD__, \gettype($modify)));
+        }
         if ($this->local) {
             return parent::modify($modify);
         }
@@ -3341,10 +2724,8 @@ class Carbon extends DateTime
 
     /**
      * Return a serialized string of the instance.
-     *
-     * @return string
      */
-    public function serialize()
+    public function serialize(): string
     {
         return \serialize($this);
     }
@@ -3352,13 +2733,9 @@ class Carbon extends DateTime
     /**
      * Create an instance form a serialized string.
      *
-     * @param string $value
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return static
      */
-    public static function fromSerialized($value)
+    public static function fromSerialized(string $value): self
     {
         $instance = @\unserialize($value);
 

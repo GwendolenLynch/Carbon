@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -33,12 +35,9 @@ class InvalidDateException extends InvalidArgumentException
     /**
      * Constructor.
      *
-     * @param string          $field
-     * @param mixed           $value
-     * @param int             $code
-     * @param \Exception|null $previous
+     * @param mixed $value
      */
-    public function __construct($field, $value, $code = 0, Exception $previous = null)
+    public function __construct(string $field, $value, int $code = 0, Exception $previous = null)
     {
         $this->field = $field;
         $this->value = $value;
@@ -47,10 +46,8 @@ class InvalidDateException extends InvalidArgumentException
 
     /**
      * Get the invalid field.
-     *
-     * @return string
      */
-    public function getField()
+    public function getField(): string
     {
         return $this->field;
     }

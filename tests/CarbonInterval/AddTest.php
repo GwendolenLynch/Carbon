@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -18,20 +20,20 @@ use Tests\AbstractTestCase;
 
 class AddTest extends AbstractTestCase
 {
-    public function testAdd()
+    public function testAdd(): void
     {
         $ci = CarbonInterval::create(4, 3, 6, 7, 8, 10, 11)->add(new DateInterval('P2Y1M5DT22H33M44S'));
         $this->assertCarbonInterval($ci, 6, 4, 54, 30, 43, 55);
     }
 
-    public function testAddWithDiffDateInterval()
+    public function testAddWithDiffDateInterval(): void
     {
         $diff = Carbon::now()->diff(Carbon::now()->addWeeks(3));
         $ci = CarbonInterval::create(4, 3, 6, 7, 8, 10, 11)->add($diff);
         $this->assertCarbonInterval($ci, 4, 3, 70, 8, 10, 11);
     }
 
-    public function testAddWithNegativeDiffDateInterval()
+    public function testAddWithNegativeDiffDateInterval(): void
     {
         $diff = Carbon::now()->diff(Carbon::now()->subWeeks(3));
         $ci = CarbonInterval::create(4, 3, 6, 7, 8, 10, 11)->add($diff);

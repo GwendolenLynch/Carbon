@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -16,47 +18,47 @@ use Tests\AbstractTestCase;
 
 class AddTest extends AbstractTestCase
 {
-    public function testAddYearsPositive()
+    public function testAddYearsPositive(): void
     {
         $this->assertSame(1976, Carbon::createFromDate(1975)->addYears(1)->year);
     }
 
-    public function testAddYearsZero()
+    public function testAddYearsZero(): void
     {
         $this->assertSame(1975, Carbon::createFromDate(1975)->addYears(0)->year);
     }
 
-    public function testAddYearsNegative()
+    public function testAddYearsNegative(): void
     {
         $this->assertSame(1974, Carbon::createFromDate(1975)->addYears(-1)->year);
     }
 
-    public function testAddYear()
+    public function testAddYear(): void
     {
         $this->assertSame(1976, Carbon::createFromDate(1975)->addYear()->year);
     }
 
-    public function testAddDaysPositive()
+    public function testAddDaysPositive(): void
     {
         $this->assertSame(1, Carbon::createFromDate(1975, 5, 31)->addDays(1)->day);
     }
 
-    public function testAddDaysZero()
+    public function testAddDaysZero(): void
     {
         $this->assertSame(31, Carbon::createFromDate(1975, 5, 31)->addDays(0)->day);
     }
 
-    public function testAddDaysNegative()
+    public function testAddDaysNegative(): void
     {
         $this->assertSame(30, Carbon::createFromDate(1975, 5, 31)->addDays(-1)->day);
     }
 
-    public function testAddDay()
+    public function testAddDay(): void
     {
         $this->assertSame(1, Carbon::createFromDate(1975, 5, 31)->addDay()->day);
     }
 
-    public function testAddWeekdaysPositive()
+    public function testAddWeekdaysPositive(): void
     {
         $dt = Carbon::create(2012, 1, 4, 13, 2, 1)->addWeekdays(9);
 
@@ -68,102 +70,102 @@ class AddTest extends AbstractTestCase
         $this->assertSame(1, $dt->second);
     }
 
-    public function testAddWeekdaysZero()
+    public function testAddWeekdaysZero(): void
     {
         $this->assertSame(4, Carbon::createFromDate(2012, 1, 4)->addWeekdays(0)->day);
     }
 
-    public function testAddWeekdaysNegative()
+    public function testAddWeekdaysNegative(): void
     {
         $this->assertSame(18, Carbon::createFromDate(2012, 1, 31)->addWeekdays(-9)->day);
     }
 
-    public function testAddWeekday()
+    public function testAddWeekday(): void
     {
         $this->assertSame(9, Carbon::createFromDate(2012, 1, 6)->addWeekday()->day);
     }
 
-    public function testAddWeekdayDuringWeekend()
+    public function testAddWeekdayDuringWeekend(): void
     {
         $this->assertSame(9, Carbon::createFromDate(2012, 1, 7)->addWeekday()->day);
     }
 
-    public function testAddWeeksPositive()
+    public function testAddWeeksPositive(): void
     {
         $this->assertSame(28, Carbon::createFromDate(1975, 5, 21)->addWeeks(1)->day);
     }
 
-    public function testAddWeeksZero()
+    public function testAddWeeksZero(): void
     {
         $this->assertSame(21, Carbon::createFromDate(1975, 5, 21)->addWeeks(0)->day);
     }
 
-    public function testAddWeeksNegative()
+    public function testAddWeeksNegative(): void
     {
         $this->assertSame(14, Carbon::createFromDate(1975, 5, 21)->addWeeks(-1)->day);
     }
 
-    public function testAddWeek()
+    public function testAddWeek(): void
     {
         $this->assertSame(28, Carbon::createFromDate(1975, 5, 21)->addWeek()->day);
     }
 
-    public function testAddHoursPositive()
+    public function testAddHoursPositive(): void
     {
         $this->assertSame(1, Carbon::createFromTime(0)->addHours(1)->hour);
     }
 
-    public function testAddHoursZero()
+    public function testAddHoursZero(): void
     {
         $this->assertSame(0, Carbon::createFromTime(0)->addHours(0)->hour);
     }
 
-    public function testAddHoursNegative()
+    public function testAddHoursNegative(): void
     {
         $this->assertSame(23, Carbon::createFromTime(0)->addHours(-1)->hour);
     }
 
-    public function testAddHour()
+    public function testAddHour(): void
     {
         $this->assertSame(1, Carbon::createFromTime(0)->addHour()->hour);
     }
 
-    public function testAddMinutesPositive()
+    public function testAddMinutesPositive(): void
     {
         $this->assertSame(1, Carbon::createFromTime(0, 0)->addMinutes(1)->minute);
     }
 
-    public function testAddMinutesZero()
+    public function testAddMinutesZero(): void
     {
         $this->assertSame(0, Carbon::createFromTime(0, 0)->addMinutes(0)->minute);
     }
 
-    public function testAddMinutesNegative()
+    public function testAddMinutesNegative(): void
     {
         $this->assertSame(59, Carbon::createFromTime(0, 0)->addMinutes(-1)->minute);
     }
 
-    public function testAddMinute()
+    public function testAddMinute(): void
     {
         $this->assertSame(1, Carbon::createFromTime(0, 0)->addMinute()->minute);
     }
 
-    public function testAddSecondsPositive()
+    public function testAddSecondsPositive(): void
     {
         $this->assertSame(1, Carbon::createFromTime(0, 0, 0)->addSeconds(1)->second);
     }
 
-    public function testAddSecondsZero()
+    public function testAddSecondsZero(): void
     {
         $this->assertSame(0, Carbon::createFromTime(0, 0, 0)->addSeconds(0)->second);
     }
 
-    public function testAddSecondsNegative()
+    public function testAddSecondsNegative(): void
     {
         $this->assertSame(59, Carbon::createFromTime(0, 0, 0)->addSeconds(-1)->second);
     }
 
-    public function testAddSecond()
+    public function testAddSecond(): void
     {
         $this->assertSame(1, Carbon::createFromTime(0, 0, 0)->addSecond()->second);
     }
@@ -171,96 +173,96 @@ class AddTest extends AbstractTestCase
     /**
      * Test non plural methods with non default args.
      */
-    public function testAddYearPassingArg()
+    public function testAddYearPassingArg(): void
     {
         $this->assertSame(1977, Carbon::createFromDate(1975)->addYear(2)->year);
     }
 
-    public function testAddDayPassingArg()
+    public function testAddDayPassingArg(): void
     {
         $this->assertSame(12, Carbon::createFromDate(1975, 5, 10)->addDay(2)->day);
     }
 
-    public function testAddHourPassingArg()
+    public function testAddHourPassingArg(): void
     {
         $this->assertSame(2, Carbon::createFromTime(0)->addHour(2)->hour);
     }
 
-    public function testAddMinutePassingArg()
+    public function testAddMinutePassingArg(): void
     {
         $this->assertSame(2, Carbon::createFromTime(0)->addMinute(2)->minute);
     }
 
-    public function testAddSecondPassingArg()
+    public function testAddSecondPassingArg(): void
     {
         $this->assertSame(2, Carbon::createFromTime(0)->addSecond(2)->second);
     }
 
-    public function testAddQuarter()
+    public function testAddQuarter(): void
     {
         $this->assertSame(8, Carbon::createFromDate(1975, 5, 6)->addQuarter()->month);
     }
 
-    public function testAddQuarterNegative()
+    public function testAddQuarterNegative(): void
     {
         $this->assertSame(2, Carbon::createFromDate(1975, 5, 6)->addQuarter(-1)->month);
     }
 
-    public function testSubQuarter()
+    public function testSubQuarter(): void
     {
         $this->assertSame(2, Carbon::createFromDate(1975, 5, 6)->subQuarter()->month);
     }
 
-    public function testSubQuarterNegative()
+    public function testSubQuarterNegative(): void
     {
         $this->assertCarbon(Carbon::createFromDate(1975, 5, 6)->subQuarters(2), 1974, 11, 6);
     }
 
-    public function testAddCentury()
+    public function testAddCentury(): void
     {
         $this->assertSame(2075, Carbon::createFromDate(1975)->addCentury()->year);
         $this->assertSame(2075, Carbon::createFromDate(1975)->addCentury(1)->year);
         $this->assertSame(2175, Carbon::createFromDate(1975)->addCentury(2)->year);
     }
 
-    public function testAddCenturyNegative()
+    public function testAddCenturyNegative(): void
     {
         $this->assertSame(1875, Carbon::createFromDate(1975)->addCentury(-1)->year);
         $this->assertSame(1775, Carbon::createFromDate(1975)->addCentury(-2)->year);
     }
 
-    public function testAddCenturies()
+    public function testAddCenturies(): void
     {
         $this->assertSame(2075, Carbon::createFromDate(1975)->addCenturies(1)->year);
         $this->assertSame(2175, Carbon::createFromDate(1975)->addCenturies(2)->year);
     }
 
-    public function testAddCenturiesNegative()
+    public function testAddCenturiesNegative(): void
     {
         $this->assertSame(1875, Carbon::createFromDate(1975)->addCenturies(-1)->year);
         $this->assertSame(1775, Carbon::createFromDate(1975)->addCenturies(-2)->year);
     }
 
-    public function testSubCentury()
+    public function testSubCentury(): void
     {
         $this->assertSame(1875, Carbon::createFromDate(1975)->subCentury()->year);
         $this->assertSame(1875, Carbon::createFromDate(1975)->subCentury(1)->year);
         $this->assertSame(1775, Carbon::createFromDate(1975)->subCentury(2)->year);
     }
 
-    public function testSubCenturyNegative()
+    public function testSubCenturyNegative(): void
     {
         $this->assertSame(2075, Carbon::createFromDate(1975)->subCentury(-1)->year);
         $this->assertSame(2175, Carbon::createFromDate(1975)->subCentury(-2)->year);
     }
 
-    public function testSubCenturies()
+    public function testSubCenturies(): void
     {
         $this->assertSame(1875, Carbon::createFromDate(1975)->subCenturies(1)->year);
         $this->assertSame(1775, Carbon::createFromDate(1975)->subCenturies(2)->year);
     }
 
-    public function testSubCenturiesNegative()
+    public function testSubCenturiesNegative(): void
     {
         $this->assertSame(2075, Carbon::createFromDate(1975)->subCenturies(-1)->year);
         $this->assertSame(2175, Carbon::createFromDate(1975)->subCenturies(-2)->year);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -16,7 +18,7 @@ use Tests\AbstractTestCase;
 
 class TestingAidsTest extends AbstractTestCase
 {
-    public function testTestingAidsWithTestNowNotSet()
+    public function testTestingAidsWithTestNowNotSet(): void
     {
         Carbon::setTestNow();
 
@@ -24,7 +26,7 @@ class TestingAidsTest extends AbstractTestCase
         $this->assertNull(Carbon::getTestNow());
     }
 
-    public function testTestingAidsWithTestNowSet()
+    public function testTestingAidsWithTestNowSet(): void
     {
         Carbon::setTestNow($yesterday = Carbon::yesterday());
 
@@ -32,14 +34,14 @@ class TestingAidsTest extends AbstractTestCase
         $this->assertSame($yesterday, Carbon::getTestNow());
     }
 
-    public function testTestingAidsWithTestNowSetToString()
+    public function testTestingAidsWithTestNowSetToString(): void
     {
         Carbon::setTestNow('2016-11-23');
         $this->assertTrue(Carbon::hasTestNow());
         $this->assertEquals(Carbon::getTestNow(), Carbon::parse('2016-11-23'));
     }
 
-    public function testConstructorWithTestValueSet()
+    public function testConstructorWithTestValueSet(): void
     {
         Carbon::setTestNow($yesterday = Carbon::yesterday());
 
@@ -49,19 +51,19 @@ class TestingAidsTest extends AbstractTestCase
         $this->assertEquals($yesterday, new Carbon('now'));
     }
 
-    public function testNowWithTestValueSet()
+    public function testNowWithTestValueSet(): void
     {
         Carbon::setTestNow($yesterday = Carbon::yesterday());
 
         $this->assertEquals($yesterday, Carbon::now());
     }
 
-    public function testParseWithTestValueSet()
+    public function testParseWithTestValueSet(): void
     {
         $testNow = Carbon::yesterday();
 
         $scope = $this;
-        $this->wrapWithTestNow(function () use ($scope, $testNow) {
+        $this->wrapWithTestNow(function () use ($scope, $testNow): void {
             $scope->assertEquals($testNow, Carbon::parse());
             $scope->assertEquals($testNow, Carbon::parse(null));
             $scope->assertEquals($testNow, Carbon::parse(''));
@@ -69,12 +71,12 @@ class TestingAidsTest extends AbstractTestCase
         }, $testNow);
     }
 
-    public function testParseRelativeWithTestValueSet()
+    public function testParseRelativeWithTestValueSet(): void
     {
         $testNow = Carbon::parse('2013-09-01 05:15:05');
 
         $scope = $this;
-        $this->wrapWithTestNow(function () use ($scope) {
+        $this->wrapWithTestNow(function () use ($scope): void {
             $scope->assertSame('2013-09-01 05:10:05', Carbon::parse('5 minutes ago')->toDateTimeString());
             $scope->assertSame('2013-08-25 05:15:05', Carbon::parse('1 week ago')->toDateTimeString());
 
@@ -114,23 +116,23 @@ class TestingAidsTest extends AbstractTestCase
         }, $testNow);
     }
 
-    public function testParseRelativeWithMinusSignsInDate()
+    public function testParseRelativeWithMinusSignsInDate(): void
     {
         $testNow = Carbon::parse('2013-09-01 05:15:05');
 
         $scope = $this;
-        $this->wrapWithTestNow(function () use ($scope) {
+        $this->wrapWithTestNow(function () use ($scope): void {
             $scope->assertSame('2000-01-03 00:00:00', Carbon::parse('2000-1-3')->toDateTimeString());
             $scope->assertSame('2000-10-10 00:00:00', Carbon::parse('2000-10-10')->toDateTimeString());
         }, $testNow);
     }
 
-    public function testTimeZoneWithTestValueSet()
+    public function testTimeZoneWithTestValueSet(): void
     {
         $testNow = Carbon::parse('2013-07-01 12:00:00', 'America/New_York');
 
         $scope = $this;
-        $this->wrapWithTestNow(function () use ($scope) {
+        $this->wrapWithTestNow(function () use ($scope): void {
             $scope->assertSame('2013-07-01T12:00:00-04:00', Carbon::parse('now')->toIso8601String());
             $scope->assertSame('2013-07-01T11:00:00-05:00', Carbon::parse('now', 'America/Mexico_City')->toIso8601String());
             $scope->assertSame('2013-07-01T09:00:00-07:00', Carbon::parse('now', 'America/Vancouver')->toIso8601String());

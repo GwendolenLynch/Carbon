@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -28,7 +30,7 @@ abstract class AbstractTestCase extends TestCase
      */
     private $saveTz;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         //save current timezone
         $this->saveTz = \date_default_timezone_get();
@@ -38,14 +40,14 @@ abstract class AbstractTestCase extends TestCase
         Carbon::setTestNow($this->now = Carbon::now());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         \date_default_timezone_set($this->saveTz);
         Carbon::setTestNow();
         Carbon::resetMonthsOverflow();
     }
 
-    protected function assertCarbon(Carbon $d, $year, $month, $day, $hour = null, $minute = null, $second = null)
+    protected function assertCarbon(Carbon $d, $year, $month, $day, $hour = null, $minute = null, $second = null): void
     {
         $actual = array(
             'years' => $year,
@@ -77,12 +79,12 @@ abstract class AbstractTestCase extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    protected function assertInstanceOfCarbon($d)
+    protected function assertInstanceOfCarbon($d): void
     {
         $this->assertInstanceOf('Carbon\Carbon', $d);
     }
 
-    protected function assertCarbonInterval(CarbonInterval $ci, $years, $months = null, $days = null, $hours = null, $minutes = null, $seconds = null)
+    protected function assertCarbonInterval(CarbonInterval $ci, $years, $months = null, $days = null, $hours = null, $minutes = null, $seconds = null): void
     {
         $expected = array('years' => $ci->years);
 
@@ -116,19 +118,19 @@ abstract class AbstractTestCase extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    protected function assertInstanceOfCarbonInterval($d)
+    protected function assertInstanceOfCarbonInterval($d): void
     {
         $this->assertInstanceOf('Carbon\CarbonInterval', $d);
     }
 
-    protected function wrapWithTestNow(Closure $func, Carbon $dt = null)
+    protected function wrapWithTestNow(Closure $func, Carbon $dt = null): void
     {
         Carbon::setTestNow($dt ?: Carbon::now());
         $func();
         Carbon::setTestNow();
     }
 
-    protected function wrapWithNonDstDate(Closure $func)
+    protected function wrapWithNonDstDate(Closure $func): void
     {
         $this->wrapWithTestNow($func, Carbon::now()->startOfYear());
     }

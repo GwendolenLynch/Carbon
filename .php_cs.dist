@@ -4,6 +4,9 @@ use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
 $rules = [
+    '@PHP70Migration:risky' => true,
+    '@PHP71Migration:risky' => true,
+    '@PHPUnit60Migration:risky'  => true,
     '@PSR2' => true,
     'array_syntax' => [
         'syntax' => 'long',
@@ -53,6 +56,7 @@ EOD
     'phpdoc_trim' => true,
     'phpdoc_types' => true,
     'phpdoc_var_without_name' => true,
+    'php_unit_strict'  => false,
     'self_accessor' => true,
     'single_quote' => true,
     'space_after_semicolon' => true,
@@ -62,6 +66,7 @@ EOD
     'trim_array_spaces' => true,
     'unary_operator_spaces' => true,
 ];
+
 
 return Config::create()
     ->setRules($rules)

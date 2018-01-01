@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -21,7 +23,7 @@ class SerializationTest extends AbstractTestCase
      */
     protected $serialized;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -32,14 +34,14 @@ class SerializationTest extends AbstractTestCase
         }
     }
 
-    public function testSerialize()
+    public function testSerialize(): void
     {
         $dt = Carbon::create(2016, 2, 1, 13, 20, 25);
         $this->assertSame($this->serialized, $dt->serialize());
         $this->assertSame($this->serialized, \serialize($dt));
     }
 
-    public function testFromUnserialized()
+    public function testFromUnserialized(): void
     {
         $dt = Carbon::fromSerialized($this->serialized);
         $this->assertCarbon($dt, 2016, 2, 1, 13, 20, 25);
@@ -48,7 +50,7 @@ class SerializationTest extends AbstractTestCase
         $this->assertCarbon($dt, 2016, 2, 1, 13, 20, 25);
     }
 
-    public function testSerialization()
+    public function testSerialization(): void
     {
         $this->assertEquals(Carbon::now(), \unserialize(\serialize(Carbon::now())));
     }
@@ -67,12 +69,13 @@ class SerializationTest extends AbstractTestCase
     /**
      * @param mixed $value
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid serialized value.
      * @dataProvider \Tests\Carbon\SerializationTest::providerTestFromUnserializedWithInvalidValue
      */
-    public function testFromUnserializedWithInvalidValue($value)
+    public function testFromUnserializedWithInvalidValue($value): void
     {
-        Carbon::fromSerialized($value);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid serialized value.');
+
+        Carbon::fromSerialized((string) $value);
     }
 }

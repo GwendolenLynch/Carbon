@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -18,7 +20,7 @@ use Tests\AbstractTestCase;
 
 class ConstructTest extends AbstractTestCase
 {
-    public function testCreatesAnInstanceDefaultToNow()
+    public function testCreatesAnInstanceDefaultToNow(): void
     {
         $c = new Carbon();
         $now = Carbon::now();
@@ -27,7 +29,7 @@ class ConstructTest extends AbstractTestCase
         $this->assertCarbon($c, $now->year, $now->month, $now->day, $now->hour, $now->minute, $now->second);
     }
 
-    public function testParseCreatesAnInstanceDefaultToNow()
+    public function testParseCreatesAnInstanceDefaultToNow(): void
     {
         $c = Carbon::parse();
         $now = Carbon::now();
@@ -36,33 +38,33 @@ class ConstructTest extends AbstractTestCase
         $this->assertCarbon($c, $now->year, $now->month, $now->day, $now->hour, $now->minute, $now->second);
     }
 
-    public function testWithFancyString()
+    public function testWithFancyString(): void
     {
         Carbon::setTestNow(Carbon::today());
         $c = new Carbon('first day of January 2008');
         $this->assertCarbon($c, 2008, 1, 1, 0, 0, 0);
     }
 
-    public function testParseWithFancyString()
+    public function testParseWithFancyString(): void
     {
         Carbon::setTestNow(Carbon::today());
         $c = Carbon::parse('first day of January 2008');
         $this->assertCarbon($c, 2008, 1, 1, 0, 0, 0);
     }
 
-    public function testDefaultTimezone()
+    public function testDefaultTimezone(): void
     {
         $c = new Carbon('now');
         $this->assertSame('America/Toronto', $c->tzName);
     }
 
-    public function testParseWithDefaultTimezone()
+    public function testParseWithDefaultTimezone(): void
     {
         $c = Carbon::parse('now');
         $this->assertSame('America/Toronto', $c->tzName);
     }
 
-    public function testSettingTimezone()
+    public function testSettingTimezone(): void
     {
         $timezone = 'Europe/London';
         $dtz = new DateTimeZone($timezone);
@@ -74,7 +76,7 @@ class ConstructTest extends AbstractTestCase
         $this->assertSame(0 + $dayLightSavingTimeOffset, $c->offsetHours);
     }
 
-    public function testParseSettingTimezone()
+    public function testParseSettingTimezone(): void
     {
         $timezone = 'Europe/London';
         $dtz = new DateTimeZone($timezone);
@@ -86,7 +88,7 @@ class ConstructTest extends AbstractTestCase
         $this->assertSame(0 + $dayLightSavingTimeOffset, $c->offsetHours);
     }
 
-    public function testSettingTimezoneWithString()
+    public function testSettingTimezoneWithString(): void
     {
         $timezone = 'Asia/Tokyo';
         $dtz = new DateTimeZone($timezone);
@@ -98,7 +100,7 @@ class ConstructTest extends AbstractTestCase
         $this->assertSame(9 + $dayLightSavingTimeOffset, $c->offsetHours);
     }
 
-    public function testParseSettingTimezoneWithString()
+    public function testParseSettingTimezoneWithString(): void
     {
         $timezone = 'Asia/Tokyo';
         $dtz = new DateTimeZone($timezone);

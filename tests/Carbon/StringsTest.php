@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -18,20 +20,20 @@ use Tests\Carbon\Fixtures\MyCarbon;
 
 class StringsTest extends AbstractTestCase
 {
-    public function testToString()
+    public function testToString(): void
     {
         $d = Carbon::now();
         $this->assertSame(Carbon::now()->toDateTimeString(), ''.$d);
     }
 
-    public function testSetToStringFormat()
+    public function testSetToStringFormat(): void
     {
         Carbon::setToStringFormat('jS \o\f F, Y g:i:s a');
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('25th of December, 1975 2:15:16 pm', ''.$d);
     }
 
-    public function testResetToStringFormat()
+    public function testResetToStringFormat(): void
     {
         $d = Carbon::now();
         Carbon::setToStringFormat('123');
@@ -39,19 +41,19 @@ class StringsTest extends AbstractTestCase
         $this->assertSame($d->toDateTimeString(), ''.$d);
     }
 
-    public function testExtendedClassToString()
+    public function testExtendedClassToString(): void
     {
         $d = MyCarbon::now();
         $this->assertSame($d->toDateTimeString(), ''.$d);
     }
 
-    public function testToDateString()
+    public function testToDateString(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('1975-12-25', $d->toDateString());
     }
 
-    public function testToFormattedDateString()
+    public function testToFormattedDateString(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('Dec 25, 1975', $d->toFormattedDateString());
@@ -60,7 +62,7 @@ class StringsTest extends AbstractTestCase
     /**
      * @runInSeparateProcess
      */
-    public function testToLocalizedFormattedDateString()
+    public function testToLocalizedFormattedDateString(): void
     {
         if (\getenv('TRAVIS')) {
             $this->markTestSkipped();
@@ -73,7 +75,7 @@ class StringsTest extends AbstractTestCase
     /**
      * @runInSeparateProcess
      */
-    public function testToLocalizedFormattedDateStringWhenUtf8IsNedded()
+    public function testToLocalizedFormattedDateStringWhenUtf8IsNedded(): void
     {
         if (\getenv('TRAVIS')) {
             $this->markTestSkipped();
@@ -84,43 +86,43 @@ class StringsTest extends AbstractTestCase
         $this->assertSame('miércoles 06 enero 2016', $d->formatLocalized('%A %d %B %Y'));
     }
 
-    public function testToLocalizedFormattedTimezonedDateString()
+    public function testToLocalizedFormattedTimezonedDateString(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16, 'Europe/London');
         $this->assertSame('Thursday 25 December 1975 14:15', $d->formatLocalized('%A %d %B %Y %H:%M'));
     }
 
-    public function testToTimeString()
+    public function testToTimeString(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('14:15:16', $d->toTimeString());
     }
 
-    public function testToDateTimeString()
+    public function testToDateTimeString(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('1975-12-25 14:15:16', $d->toDateTimeString());
     }
 
-    public function testToDateTimeStringWithPaddedZeroes()
+    public function testToDateTimeStringWithPaddedZeroes(): void
     {
         $d = Carbon::create(2000, 5, 2, 4, 3, 4);
         $this->assertSame('2000-05-02 04:03:04', $d->toDateTimeString());
     }
 
-    public function testToDayDateTimeString()
+    public function testToDayDateTimeString(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('Thu, Dec 25, 1975 2:15 PM', $d->toDayDateTimeString());
     }
 
-    public function testToAtomString()
+    public function testToAtomString(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('1975-12-25T14:15:16-05:00', $d->toAtomString());
     }
 
-    public function testToCOOKIEString()
+    public function testToCOOKIEString(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         if (DateTime::COOKIE === 'l, d-M-y H:i:s T') {
@@ -132,55 +134,55 @@ class StringsTest extends AbstractTestCase
         $this->assertSame($cookieString, $d->toCookieString());
     }
 
-    public function testToIso8601String()
+    public function testToIso8601String(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('1975-12-25T14:15:16-05:00', $d->toIso8601String());
     }
 
-    public function testToRC822String()
+    public function testToRC822String(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('Thu, 25 Dec 75 14:15:16 -0500', $d->toRfc822String());
     }
 
-    public function testToRfc850String()
+    public function testToRfc850String(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('Thursday, 25-Dec-75 14:15:16 EST', $d->toRfc850String());
     }
 
-    public function testToRfc1036String()
+    public function testToRfc1036String(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('Thu, 25 Dec 75 14:15:16 -0500', $d->toRfc1036String());
     }
 
-    public function testToRfc1123String()
+    public function testToRfc1123String(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('Thu, 25 Dec 1975 14:15:16 -0500', $d->toRfc1123String());
     }
 
-    public function testToRfc2822String()
+    public function testToRfc2822String(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('Thu, 25 Dec 1975 14:15:16 -0500', $d->toRfc2822String());
     }
 
-    public function testToRfc3339String()
+    public function testToRfc3339String(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('1975-12-25T14:15:16-05:00', $d->toRfc3339String());
     }
 
-    public function testToRssString()
+    public function testToRssString(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('Thu, 25 Dec 1975 14:15:16 -0500', $d->toRssString());
     }
 
-    public function testToW3cString()
+    public function testToW3cString(): void
     {
         $d = Carbon::create(1975, 12, 25, 14, 15, 16);
         $this->assertSame('1975-12-25T14:15:16-05:00', $d->toW3cString());

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Carbon package.
  *
@@ -16,7 +18,7 @@ use Tests\AbstractTestCase;
 
 class SrMeTest extends AbstractTestCase
 {
-    public function testDiffForHumansLocalizedInMontenegrinLatin()
+    public function testDiffForHumansLocalizedInMontenegrinLatin(): void
     {
         Carbon::setLocale('sr-ME');
         $this->diffForHumansLocalizedInMontenegrinLatin();
@@ -25,10 +27,10 @@ class SrMeTest extends AbstractTestCase
         $this->diffForHumansLocalizedInMontenegrinLatin();
     }
 
-    protected function diffForHumansLocalizedInMontenegrinLatin()
+    protected function diffForHumansLocalizedInMontenegrinLatin(): void
     {
         $scope = $this;
-        $this->wrapWithNonDstDate(function () use ($scope) {
+        $this->wrapWithNonDstDate(function () use ($scope): void {
 
             /*
              * Year
@@ -503,12 +505,12 @@ class SrMeTest extends AbstractTestCase
         });
     }
 
-    public function testDiffForHumansLocalizedInMontenegrinCyrilic()
+    public function testDiffForHumansLocalizedInMontenegrinCyrilic(): void
     {
         Carbon::setLocale('sr-Cyrl-ME');
 
         $scope = $this;
-        $this->wrapWithNonDstDate(function () use ($scope) {
+        $this->wrapWithNonDstDate(function () use ($scope): void {
 
             /*
              * Year
