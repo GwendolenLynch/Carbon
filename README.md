@@ -3,7 +3,6 @@
 [![Latest Stable Version](https://poser.pugx.org/carbondate/carbon/v/stable.png)](https://packagist.org/packages/carbondate/carbon)
 [![Total Downloads](https://poser.pugx.org/carbondate/carbon/downloads.png)](https://packagist.org/packages/carbondate/carbon)
 [![Build Status](https://travis-ci.org/CarbonDate/Carbon.svg?branch=master)](https://travis-ci.org/CarbonDate/Carbon)
-[![StyleCI](https://styleci.io/repos/5724990/shield?style=flat)](https://styleci.io/repos/5724990)
 [![codecov](https://codecov.io/gh/CarbonDate/Carbon/branch/master/graph/badge.svg)](https://codecov.io/gh/CarbonDate/Carbon)
 [![PHP-Eye](https://php-eye.com/badge/carbondate/carbon/tested.svg?style=flat)](https://php-eye.com/package/carbondate/carbon)
 [![PHPStan](https://img.shields.io/badge/PHPStan-enabled-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
