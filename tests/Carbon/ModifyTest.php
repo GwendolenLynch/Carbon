@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Tests\Carbon;
 
 use Carbon\Carbon;
-use InvalidArgumentException;
 use Tests\AbstractTestCase;
 
 class ModifyTest extends AbstractTestCase
@@ -33,22 +32,8 @@ class ModifyTest extends AbstractTestCase
         $b = $a->copy();
         $b->addHours(24);
         $this->assertSame(24, $a->diffInHours($b));
-    }
-
-    public function providerModifyInvalidParameters()
-    {
-        yield [null];
-        yield [new \DateTime()];
-        yield [42];
-    }
-
-    /**
-     * @dataProvider providerModifyInvalidParameters
-     */
-    public function testModifyInvalidParameters($modify)
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        Carbon::now()->modify($modify);
+        $this->assertSame(24, $a->diffInHours($b, false));
+        $this->assertSame(24, $b->diffInHours($a));
+        $this->assertSame(-24, $b->diffInHours($a, false));
     }
 }
