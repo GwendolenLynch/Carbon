@@ -928,8 +928,6 @@ class Carbon extends DateTime
     /**
      * Get the Carbon instance (real or mock) to be returned when a "now"
      * instance is created.
-     *
-     * @return static|null the current instance used for testing
      */
     public static function getTestNow(): ?self
     {
@@ -939,8 +937,6 @@ class Carbon extends DateTime
     /**
      * Determine if there is a valid test instance set. A valid test instance
      * is anything that is not null.
-     *
-     * @return bool true if there is a test instance, otherwise false
      */
     public static function hasTestNow(): bool
     {
