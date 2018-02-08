@@ -2,6 +2,9 @@ parameters:
 	ignoreErrors:
 		- '#Static call to instance method Carbon\\CarbonInterval#'
 		- '#Parameter \#1 \$value of method Carbon\\Carbon::setTimezone\(\) expects DateTimeZone|string, DateTimeZone|int|string given#'
+		- '#Method Carbon\\Carbon::getTestNow\(\) should return static\(Carbon\\Carbon\)|null but returns Carbon\\Carbon|null#'
+
+		# Valid tests
 		- '#Access to an undefined property Carbon\\Carbon::\$doesNotExit#'
 		- '#Access to an undefined property Carbon\\CarbonInterval::\$sdfsdfss#'
 
