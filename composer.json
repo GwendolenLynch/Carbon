@@ -1,5 +1,5 @@
 {
-    "name": "nesbot/carbon",
+    "name": "carbondate/carbon",
     "type": "library",
     "description": "A simple API extension for DateTime.",
     "keywords": [
@@ -7,11 +7,7 @@
         "time",
         "DateTime"
     ],
-    "homepage": "http://carbon.nesbot.com",
-    "support": {
-        "issues": "https://github.com/briannesbitt/Carbon/issues",
-        "source": "https://github.com/briannesbitt/Carbon"
-    },
+    "homepage": "https://carbondate.github.io",
     "license": "MIT",
     "authors": [
         {
@@ -31,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "Carbon\\": "src/Carbon"
         }
     },
     "autoload-dev": {
@@ -41,6 +37,9 @@
     },
     "config": {
         "sort-packages": true
+    },
+    "replace": {
+        "nesbot/carbon": "*"
     },
     "scripts": {
         "test": [
