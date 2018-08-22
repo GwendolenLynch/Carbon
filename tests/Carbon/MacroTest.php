@@ -44,33 +44,14 @@ class MacroTest extends AbstractTestCase
         $this->assertInstanceOf(Carbon::class, $this->now);
     }
 
-    public function testCarbonIsMacroableWhenNotCalledStatically()
+    public function testCarbonIsMacroableWhenNotCalledDynamically()
     {
-        Carbon::macro('diffFromEaster', function ($year = 2019) {
-            $instance = Carbon::create($year);
-
-            $a = $instance->year % 19;
-            $b = floor($instance->year / 100);
-            $c = $instance->year % 100;
-            $d = floor($b / 4);
-            $e = $b % 4;
-            $f = floor(($b + 8) / 25);
-            $g = floor(($b - $f + 1) / 3);
-            $h = (19 * $a + $b - $d - $g + 15) % 30;
-            $i = floor($c / 4);
-            $k = $c % 4;
-            $l = (32 + 2 * $e + 2 * $i - $h - $k) % 7;
-            $m = floor(($a + 11 * $h + 22 * $l) / 451);
-            $month = floor(($h + $l - 7 * $m + 114) / 31);
-            $day = (($h + $l - 7 * $m + 114) % 31) + 1;
-
-            $instance->month($month)->day($day);
-
-            return $this->diff($instance);
+        Carbon::macro('easterDays', function ($year = 2019) {
+            return easter_days($year);
         });
 
-        $this->assertSame(1020, $this->now->diffFromEaster(2020)->days);
-        $this->assertSame(663, $this->now->diffFromEaster()->days);
+        $this->assertSame(22, $this->now->easterDays(2020));
+        $this->assertSame(31, $this->now->easterDays());
 
         Carbon::macro('otherParameterName', function ($other = true) {
             return $other;
@@ -79,57 +60,24 @@ class MacroTest extends AbstractTestCase
         $this->assertTrue($this->now->otherParameterName());
     }
 
-    public function testCarbonIsMacroableWhenNotCalledStaticallyUsingThis()
+    public function testCarbonIsMacroableWhenNotCalledDynamicallyUsingThis()
     {
-        Carbon::macro('diffFromEaster2', function ($year) {
-            $instance = Carbon::create($year);
-
-            $a = $instance->year % 19;
-            $b = floor($instance->year / 100);
-            $c = $instance->year % 100;
-            $d = floor($b / 4);
-            $e = $b % 4;
-            $f = floor(($b + 8) / 25);
-            $g = floor(($b - $f + 1) / 3);
-            $h = (19 * $a + $b - $d - $g + 15) % 30;
-            $i = floor($c / 4);
-            $k = $c % 4;
-            $l = (32 + 2 * $e + 2 * $i - $h - $k) % 7;
-            $m = floor(($a + 11 * $h + 22 * $l) / 451);
-            $month = floor(($h + $l - 7 * $m + 114) / 31);
-            $day = (($h + $l - 7 * $m + 114) % 31) + 1;
-
-            $instance->month($month)->day($day);
-
-            return $this->diff($instance);
+        Carbon::macro('diffFromEaster', function ($year) {
+            return $this->diff(
+                Carbon::create($year, 3, 21)
+                    ->setTimezone($this->getTimezone())
+                    ->addDays(easter_days($year))
+                    ->endOfDay()
+            );
         });
 
-        $this->assertSame(1020, $this->now->diffFromEaster2(2020)->days);
+        $this->assertSame(1020, $this->now->diffFromEaster(2020)->days);
     }
 
     public function testCarbonIsMacroableWhenCalledStatically()
     {
         Carbon::macro('easterDate', function ($year) {
-            $instance = Carbon::create($year);
-
-            $a = $instance->year % 19;
-            $b = floor($instance->year / 100);
-            $c = $instance->year % 100;
-            $d = floor($b / 4);
-            $e = $b % 4;
-            $f = floor(($b + 8) / 25);
-            $g = floor(($b - $f + 1) / 3);
-            $h = (19 * $a + $b - $d - $g + 15) % 30;
-            $i = floor($c / 4);
-            $k = $c % 4;
-            $l = (32 + 2 * $e + 2 * $i - $h - $k) % 7;
-            $m = floor(($a + 11 * $h + 22 * $l) / 451);
-            $month = floor(($h + $l - 7 * $m + 114) / 31);
-            $day = (($h + $l - 7 * $m + 114) % 31) + 1;
-
-            $instance->month($month)->day($day);
-
-            return $instance;
+            return Carbon::create($year, 3, 21)->addDays(easter_days($year));
         });
 
         $this->assertSame('05/04', Carbon::easterDate(2015)->format('d/m'));
@@ -152,6 +100,44 @@ class MacroTest extends AbstractTestCase
         $date = Carbon::parse('2000-01-01 12:00:00', 'UTC');
 
         $this->assertSame('06:00 America/Belize', $date->userFormat('H:i e'));
+    }
+
+    public function testMacroProperties()
+    {
+        // Let say a school year start 5 months before, so school year 2018 is august 2017 to july 2018,
+        // Then you can create get/set method this way:
+        Carbon::macro('setSchoolYear', function ($schoolYear) {
+            $this->year = $schoolYear;
+            if ($this->month > 7) {
+                $this->year--;
+            }
+        });
+        Carbon::macro('getSchoolYear', function () {
+            $schoolYear = $this->year;
+            if ($this->month > 7) {
+                $schoolYear++;
+            }
+
+            return $schoolYear;
+        });
+        // This will make getSchoolYear/setSchoolYear as usual, but get/set prefix will also enable
+        // getter and setter for the ->schoolYear property
+
+        $date = Carbon::parse('2016-06-01');
+
+        $this->assertSame(2016, $date->schoolYear);
+
+        $date->addMonths(3);
+
+        $this->assertSame(2017, $date->schoolYear);
+
+        $date->schoolYear++;
+
+        $this->assertSame('2017-09-01', $date->format('Y-m-d'));
+
+        $date->schoolYear = 2020;
+
+        $this->assertSame('2019-09-01', $date->format('Y-m-d'));
     }
 
     /**

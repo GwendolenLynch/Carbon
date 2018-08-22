@@ -12,10 +12,10 @@
 namespace Carbon;
 
 use BadMethodCallException;
+use Carbon\Traits\Options;
 use Closure;
 use Countable;
 use DateInterval;
-use DatePeriod;
 use DateTime;
 use DateTimeInterface;
 use InvalidArgumentException;
@@ -26,7 +26,6 @@ use RuntimeException;
 
 /**
  * Substitution of DatePeriod with some modifications and many more features.
- * Fully compatible with PHP 5.3+!
  *
  * @method static CarbonPeriod start($date, $inclusive = null) Create instance specifying start date.
  * @method static CarbonPeriod since($date, $inclusive = null) Alias for start().
@@ -79,7 +78,7 @@ use RuntimeException;
  * @method CarbonPeriod filter($callback, $name = null) Add a filter to the stack.
  * @method CarbonPeriod push($callback, $name = null) Alias for filter().
  * @method CarbonPeriod prepend($callback, $name = null) Prepend a filter to the stack.
- * @method CarbonPeriod filters(array $filters = array()) Set filters stack.
+ * @method CarbonPeriod filters(array $filters = []) Set filters stack.
  * @method CarbonPeriod interval($interval) Change the period date interval.
  * @method CarbonPeriod invert() Invert the period date interval.
  * @method CarbonPeriod years($years = 1) Set the years portion of the date interval.
@@ -100,6 +99,8 @@ use RuntimeException;
  */
 class CarbonPeriod implements Iterator, Countable
 {
+    use Options;
+
     /**
      * Built-in filters.
      *
@@ -169,14 +170,14 @@ class CarbonPeriod implements Iterator, Countable
     /**
      * Period start date. Applied on rewind. Always present, now by default.
      *
-     * @var Carbon
+     * @var CarbonInterface
      */
     protected $startDate;
 
     /**
      * Period end date. For inverted interval should be before the start date. Applied via a filter.
      *
-     * @var Carbon|null
+     * @var CarbonInterface|null
      */
     protected $endDate;
 
@@ -206,7 +207,7 @@ class CarbonPeriod implements Iterator, Countable
      * Current date. May temporarily hold unaccepted value when looking for a next valid date.
      * Equal to null only before the first iteration.
      *
-     * @var Carbon
+     * @var CarbonInterface
      */
     protected $current;
 
@@ -434,7 +435,13 @@ class CarbonPeriod implements Iterator, Countable
         }
 
         foreach ($arguments as $argument) {
-            if ($this->dateInterval === null && $parsed = CarbonInterval::make($argument)) {
+            if ($this->dateInterval === null &&
+                (
+                    is_string($argument) && preg_match('/^(\d.*|P[T0-9].*|(?:\h*\d+(?:\.\d+)?\h*[a-z]+)+)$/i', $argument) ||
+                    $argument instanceof DateInterval
+                ) &&
+                $parsed = CarbonInterval::make($argument)
+            ) {
                 $this->setDateInterval($parsed);
             } elseif ($this->startDate === null && $parsed = Carbon::make($argument)) {
                 $this->setStartDate($parsed);
@@ -1020,8 +1027,6 @@ class CarbonPeriod implements Iterator, Countable
 
     /**
      * Handle change of the parameters.
-     *
-     * @return void
      */
     protected function handleChangedParameters()
     {
@@ -1177,7 +1182,7 @@ class CarbonPeriod implements Iterator, Countable
         $this->timezone = static::intervalHasTime($this->dateInterval) ? $this->current->getTimezone() : null;
 
         if ($this->timezone) {
-            $this->current = $this->current->setTimezone('UTC');
+            $this->current = $this->current->utc();
         }
 
         $this->validationResult = null;
@@ -1185,6 +1190,22 @@ class CarbonPeriod implements Iterator, Countable
         if ($this->isStartExcluded() || $this->validateCurrentDate() === false) {
             $this->incrementCurrentDateUntilValid();
         }
+    }
+
+    /**
+     * Skip iterations and returns iteration state (false if ended, true if still valid).
+     *
+     * @param int $count steps number to skip (1 by default)
+     *
+     * @return bool
+     */
+    public function skip($count = 1)
+    {
+        for ($i = $count; $this->valid() && $i > 0; $i--) {
+            $this->next();
+        }
+
+        return $this->valid();
     }
 
     /**
